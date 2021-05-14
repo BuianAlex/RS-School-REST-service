@@ -16,6 +16,7 @@
   "settings": {
     "noInlineConfig": true
   },
+  "ignorePatterns": ["test/**/*.js"],
   "extends": [
     "eslint:recommended",
     "plugin:node/recommended",
