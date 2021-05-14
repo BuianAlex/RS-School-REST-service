@@ -18,7 +18,7 @@ router.route('/:userId').get(async (req, res, next) => {
     if (user) {
       return res.json(User.toResponse(user));
     }
-    return res.sendStatus(404);
+    return res.status(404).send('User not found');
   } catch (error) {
     return next(error);
   }
@@ -38,6 +38,7 @@ router.route('/:userId').delete(async (req, res, next) => {
   const { userId } = req.params;
   try {
     const isSuccessful = await usersService.deleteById(userId);
+    console.log('isSuccessful', isSuccessful);
     if (isSuccessful) {
       return res.status(204).send('The user has been deleted');
     }
