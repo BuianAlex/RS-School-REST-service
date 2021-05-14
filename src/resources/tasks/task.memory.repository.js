@@ -47,15 +47,13 @@ const updateMany = async (filter, filterValue, newValue) => {
 };
 
 const deleteMany = async (filter, filterValue) => {
-  console.log(filter, filterValue);
-  console.log('bh', taskList.length);
   const newList = taskList.filter((item) => {
-    console.log(typeof item[filter]);
     if (item[filter] !== filterValue) {
       return true;
     }
+    return false;
   });
-  console.log('af', taskList.length, newList.length);
+
   taskList = newList;
 };
 

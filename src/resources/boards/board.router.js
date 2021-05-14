@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Board = require('./board.model');
 const boardsService = require('./board.service');
+const validate = require('../../middleWare/validateMiddleware');
+const schema = require('./json.schema');
 
 router.route('/').get(async (req, res, next) => {
   try {
@@ -18,13 +20,13 @@ router.route('/:boardId').get(async (req, res, next) => {
     if (board) {
       return res.json(Board.toResponse(board));
     }
-    return res.send('Board not found', 404);
+    return res.status(404).send('Board not found');
   } catch (error) {
     return next(error);
   }
 });
 
-router.route('/').post(async (req, res, next) => {
+router.route('/').post(validate(schema), async (req, res, next) => {
   try {
     const newBoard = await boardsService.createBoard(req.body);
     res.status(201);
@@ -47,7 +49,7 @@ router.route('/:boardId').delete(async (req, res, next) => {
   }
 });
 
-router.route('/:boardId').put(async (req, res, next) => {
+router.route('/:boardId').put(validate(schema), async (req, res, next) => {
   const { boardId } = req.params;
   try {
     const boardUpdated = await boardsService.findByIdAndUpdate(

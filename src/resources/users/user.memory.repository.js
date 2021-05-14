@@ -25,7 +25,6 @@ const deleteById = async (userId) => {
 };
 
 const findByIdAndUpdate = async (userId, newProps) => {
-  console.log(newProps);
   const rowIndex = userList.findIndex((item) => item.id === userId);
   if (rowIndex >= 0) {
     const user = userList[rowIndex];

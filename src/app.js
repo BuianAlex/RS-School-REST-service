@@ -27,7 +27,14 @@ app.use('/boards', taskRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  if (err && err.status) {
+    res.status(err.status);
+    res.send(err.message);
+  } else {
+    const answer = new Error();
+    answer.message = 'Something broke!';
+    res.status(500).send(answer);
+  }
   next();
 });
 

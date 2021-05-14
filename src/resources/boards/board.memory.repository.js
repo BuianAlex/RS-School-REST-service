@@ -25,7 +25,6 @@ const deleteById = async (boardId) => {
 };
 
 const findByIdAndUpdate = async (boardId, newProps) => {
-  console.log(newProps);
   const rowIndex = boardList.findIndex((item) => item.id === boardId);
   if (rowIndex >= 0) {
     const board = boardList[rowIndex];
