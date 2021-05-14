@@ -1,6 +1,6 @@
 const Ajv = require('ajv');
 
-const ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
+const ajv = new Ajv({ strictTuples: false }); // options can be passed, e.g. {allErrors: true}
 
 const schema = {
   type: 'object',
@@ -9,7 +9,7 @@ const schema = {
     title: { type: 'string' },
     columns: {
       type: 'array',
-      minItems: 0,
+      default: [],
       items: [
         {
           type: 'object',
