@@ -1,21 +1,20 @@
 const { v4: uuidv4 } = require('uuid');
-const boardsRepo = require('./board.memory.repository');
-
+/**
+ * Class representing a board
+ */
 class Board {
+  /**
+   * Create a board.
+   * @param {string} id Board ID
+   * @param {string} title Board title
+   * @param {Array} columns Array of columns
+   */
   constructor({ id = uuidv4(), title = 'testBoard', columns = [] } = {}) {
     this.id = id;
     this.title = title;
     this.columns = columns;
   }
 
-  async save() {
-    return boardsRepo.pushBoard(this);
-  }
-
-  static toResponse(board) {
-    const { id, title, columns } = board;
-    return { id, title, columns };
-  }
 }
 
 module.exports = Board;

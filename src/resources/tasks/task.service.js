@@ -1,24 +1,23 @@
 const tasksRepo = require('./task.memory.repository');
 const Task = require('./task.model');
 
-const getAll = () => tasksRepo.getAll();
+const getAllTasks = () => tasksRepo.getAllTasks();
 
 const createTask = (taskData) => {
   const newTask = new Task(taskData);
-  return newTask.save();
+  return tasksRepo.addTask(newTask);
 };
 
-const getById = (taskId) => tasksRepo.getById(taskId);
+const findTask = (taskId) => tasksRepo.findTask(taskId);
 
-const deleteById = (taskId) => tasksRepo.deleteById(taskId);
+const deleteTask = (taskId) => tasksRepo.deleteTask(taskId);
 
-const findByIdAndUpdate = (taskId, newProps) =>
-  tasksRepo.findByIdAndUpdate(taskId, newProps);
+const updateTask = (taskId, newProps) => tasksRepo.updateTask(taskId, newProps);
 
 module.exports = {
-  getAll,
+  getAllTasks,
   createTask,
-  getById,
-  deleteById,
-  findByIdAndUpdate,
+  findTask,
+  deleteTask,
+  updateTask,
 };

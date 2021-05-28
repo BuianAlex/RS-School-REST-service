@@ -1,41 +1,39 @@
-const userList = [];
+const inMemoryDb = require('../../db');
 
-const getAll = async () => userList;
+const tableName = 'USERS';
 
-const pushUser = async (user) => {
-  userList.push(user);
-  return user;
+const getAllUsers = async () => inMemoryDb.getAllRows({ tableName: 'USERS' });
+
+const addUser = async (newUser) =>
+  inMemoryDb.addRow({ tableName, data: newUser });
+
+const getById = async (userId) =>
+  inMemoryDb.find({ tableName, filter: { id: userId } });
+
+const deleteUser = async (userID) => {
+  await inMemoryDb.delete({
+    tableName,
+    filter: { id: userID },
+  });
+  await inMemoryDb.updateManyRows({
+    tableName: 'TASKS',
+    filter: { userId: userID },
+    newProps: { userId: null },
+  });
+  return true;
 };
 
-const getById = async (userId) => {
-  const filteredArray = userList.filter((item) => item.id === userId);
-  if (filteredArray.length) {
-    return filteredArray[0];
-  }
-  return false;
-};
+const updateUser = async (userID, newProps) =>
+  inMemoryDb.updateRow({
+    tableName,
+    filter: { id: userID },
+    newProps,
+  });
 
-const deleteById = async (userId) => {
-  const rowIndex = userList.findIndex((item) => item.id === userId);
-  if (rowIndex >= 0) {
-    userList.splice(rowIndex, 1);
-    return true;
-  }
-  return false;
+module.exports = {
+  getAllUsers,
+  addUser,
+  getById,
+  deleteUser,
+  updateUser,
 };
-
-const findByIdAndUpdate = async (userId, newProps) => {
-  const rowIndex = userList.findIndex((item) => item.id === userId);
-  if (rowIndex >= 0) {
-    const user = userList[rowIndex];
-    Object.keys(newProps).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(user, key)) {
-        user[key] = newProps[key];
-      }
-    });
-    return user;
-  }
-  return false;
-};
-
-module.exports = { getAll, pushUser, getById, deleteById, findByIdAndUpdate };

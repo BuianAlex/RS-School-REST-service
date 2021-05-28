@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require('uuid');
-const tasksRepo = require('./task.memory.repository');
 
 class Task {
   constructor({
@@ -19,14 +18,6 @@ class Task {
     this.userId = userId;
     this.boardId = boardId;
     this.columnId = columnId;
-  }
-
-  async save() {
-    return tasksRepo.pushTask(this);
-  }
-
-  static toResponse(task) {
-    return task;
   }
 }
 

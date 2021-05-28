@@ -1,41 +1,28 @@
-const boardList = [];
+const inMemoryDb = require('../../db');
 
-const getAll = async () => boardList;
+const tableName = 'BOARDS';
 
-const pushBoard = async (board) => {
-  boardList.push(board);
-  return board;
+const getAllBoards = async () => inMemoryDb.getAllRows({ tableName });
+
+const addBoard = async (board) => inMemoryDb.addRow({ tableName, data: board });
+
+const findBoard = async (boardID) =>
+  inMemoryDb.find({ tableName, filter: { id: boardID } });
+
+const deleteBoard = async (boardID) =>{
+  await inMemoryDb.delete({ tableName, filter: { id: boardID } });
+  await inMemoryDb.deleteMany({tableName: 'TASKS', filter:{boardId: boardID}})
+  return true;
+}
+  
+
+const updateBoard = async (boardID, newProps) =>
+  inMemoryDb.updateRow({ tableName, filter: { id: boardID }, newProps });
+
+module.exports = {
+  getAllBoards,
+  addBoard,
+  findBoard,
+  deleteBoard,
+  updateBoard,
 };
-
-const getById = async (boardId) => {
-  const filteredArray = boardList.filter((item) => item.id === boardId);
-  if (filteredArray.length) {
-    return filteredArray[0];
-  }
-  return false;
-};
-
-const deleteById = async (boardId) => {
-  const rowIndex = boardList.findIndex((item) => item.id === boardId);
-  if (rowIndex >= 0) {
-    boardList.splice(rowIndex, 1);
-    return true;
-  }
-  return false;
-};
-
-const findByIdAndUpdate = async (boardId, newProps) => {
-  const rowIndex = boardList.findIndex((item) => item.id === boardId);
-  if (rowIndex >= 0) {
-    const board = boardList[rowIndex];
-    Object.keys(newProps).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(board, key)) {
-        board[key] = newProps[key];
-      }
-    });
-    return board;
-  }
-  return false;
-};
-
-module.exports = { getAll, pushBoard, getById, deleteById, findByIdAndUpdate };
