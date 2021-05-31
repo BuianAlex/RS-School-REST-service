@@ -870,3 +870,5 @@
 ::ffff:127.0.0.1 - - [28/May/2021:20:55:34 +0000] "DELETE /boards/59922ca5-33cb-4ccf-8570-2b4466ad5b8a/tasks/c5a18dd8-39c1-4a88-b1cd-006c20a22cf4 HTTP/1.1" 204 - "-" "-"
 ::ffff:127.0.0.1 - - [28/May/2021:20:55:34 +0000] "GET /boards/59922ca5-33cb-4ccf-8570-2b4466ad5b8a/tasks/c5a18dd8-39c1-4a88-b1cd-006c20a22cf4 HTTP/1.1" 404 14 "-" "-"
 ::ffff:127.0.0.1 - - [28/May/2021:20:55:34 +0000] "DELETE /boards/59922ca5-33cb-4ccf-8570-2b4466ad5b8a HTTP/1.1" 204 - "-" "-"
+::1 - - [31/May/2021:09:37:46 +0000] "GET / HTTP/1.1" 200 19 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+::1 - - [31/May/2021:09:37:46 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:4000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
