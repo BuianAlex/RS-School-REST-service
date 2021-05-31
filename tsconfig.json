@@ -2,9 +2,10 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "CommonJS",
-    "allowJs": false,
+    "allowJs": true,
     "outDir": "./build",
     "rootDir": "./src",
+    "implements": "fix",
     "downlevelIteration": false,
     "strict": true,
     "noUnusedLocals": true,
@@ -25,5 +26,5 @@
   ],
   "include": [
     "./src/**/*.ts"
-  ]
+, "src/db/index.js"  ]
 }
