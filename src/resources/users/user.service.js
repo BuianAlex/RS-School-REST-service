@@ -52,7 +52,7 @@ const deleteUser = async (userID) => {
  * @param {string} userData.name  User name
  * @param {string} userData.login User login
  * @param {string} userData.password User password
- * @returns {Promise(Object|Boolean)} Resolve updated user if not found - false
+ * @returns {Promise<(Object|Boolean)>} Resolve updated user if not found - false
  */
 const updateUser = async (userID, newProps) =>
   usersRepo.updateUser(userID, newProps);
