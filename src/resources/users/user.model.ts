@@ -1,27 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
+import { IUser } from './user.types';
 /**
  * Class to create a user object
  * @class
  */
-interface IUser{
+class User implements IUser {
   id: string;
-  name: string,
-  login: string,
-  password: string,
-}
-class User implements IUser  {
-    id: string;
-    name: string;
-    login: string;
-    password: string;
+  name: string;
+  login: string;
+  password: string;
   /**
-   * @param {Object} object  User id automatically generated
+   * @param {Object} object  User data
    * @param {string} object.id  User id automatically generated
    * @param {string} object.name User name
    * @param {string} object.login User login
    * @param {string} object.password User password
    */
-  
 
   constructor({
     id = uuidv4(),
@@ -34,6 +28,7 @@ class User implements IUser  {
     this.login = login;
     this.password = password;
   }
+  [key: string]: string;
 
   /**
    * Function toResponse clearing object user for response
@@ -41,7 +36,7 @@ class User implements IUser  {
    * @param {Object} user User object
    * @returns {Object} user id, name, login
    */
-  static toResponse(user:IUser) {
+  static toResponse(user: IUser) {
     const { id, name, login } = user;
     return { id, name, login };
   }

@@ -6,6 +6,9 @@
     "no-loops"
   ],
   "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "tslint-config-prettier",
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"

@@ -1,15 +1,16 @@
 /**
  * @module userService
  */
-const usersRepo = require('./user.memory.repository');
-const taskRepo = require('../tasks/task.memory.repository');
-const User = require('./user.model');
+import * as usersRepo from './user.memory.repository';
+import taskRepo from '../tasks/task.memory.repository';
+import User from './user.model';
+import { IUser, UserID } from './user.types';
 /**
  * Get all users from the db
  * @async
  * @returns {Promise<Array>} Resolve in array of user objects
  */
-const getAll = async () => usersRepo.getAllUsers();
+export const getAll = async (): Promise<IUser[]> => usersRepo.getAllUsers();
 /**
  * Create new user and add to the db
  * @async
@@ -19,7 +20,7 @@ const getAll = async () => usersRepo.getAllUsers();
  * @param {string} userData.password User password
  * @returns {Promise<Object>} Resolve in object of new user
  */
-const createUser = async (userData) => {
+export const createUser = async (userData: IUser): Promise<IUser> => {
   const newUser = new User(userData);
   return usersRepo.addUser(newUser);
 };
@@ -28,13 +29,14 @@ const createUser = async (userData) => {
  * @param {string} userID User ID
  * @returns {Promise<(Object|Boolean)>} Resolve in object of user if not found - false
  */
-const findUser = async (userID) => usersRepo.getById(userID);
+export const findUser = async (userID: UserID): Promise<IUser | null> =>
+  usersRepo.getById(userID);
 /**
  * Delete user by ID
  * @param {string} taskId User ID
  * @returns {Promise<Boolean>} Resolve true if not found - false
  */
-const deleteUser = async (userID) => {
+export const deleteUser = async (userID: UserID): Promise<boolean> => {
   try {
     const result = await usersRepo.deleteUser(userID);
     if (result) {
@@ -54,7 +56,7 @@ const deleteUser = async (userID) => {
  * @param {string} userData.password User password
  * @returns {Promise<(Object|Boolean)>} Resolve updated user if not found - false
  */
-const updateUser = async (userID, newProps) =>
-  usersRepo.updateUser(userID, newProps);
-
-module.exports = { getAll, createUser, findUser, deleteUser, updateUser };
+export const updateUser = async (
+  userID: UserID,
+  newProps: IUser
+): Promise<IUser | null> => usersRepo.updateUser(userID, newProps);
