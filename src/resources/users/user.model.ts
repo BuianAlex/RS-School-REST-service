@@ -6,8 +6,11 @@ import { IUser } from './user.types';
  */
 class User implements IUser {
   id: string;
+
   name: string;
+
   login: string;
+
   password: string;
   /**
    * @param {Object} object  User data
@@ -28,6 +31,7 @@ class User implements IUser {
     this.login = login;
     this.password = password;
   }
+
   [key: string]: string;
 
   /**
@@ -36,7 +40,7 @@ class User implements IUser {
    * @param {Object} user User object
    * @returns {Object} user id, name, login
    */
-  static toResponse(user: IUser) {
+  static toResponse(user: IUser): Partial<IUser> {
     const { id, name, login } = user;
     return { id, name, login };
   }

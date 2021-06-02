@@ -1,7 +1,7 @@
 import inMemoryDb from '../../db';
 import { IUser, UserID } from './user.types';
 
-const tableName: string = 'USERS';
+const tableName = 'USERS';
 
 export const getAllUsers = async (): Promise<IUser[]> =>
   inMemoryDb.getAllRows({ tableName: 'USERS' });

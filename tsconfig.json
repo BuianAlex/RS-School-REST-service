@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "CommonJS",
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "./build",
     "rootDir": "./src",
     "downlevelIteration": false,
@@ -21,7 +21,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": [
-    "node_modules/"
+    "node_modules/",
+    "test"
   ],
   "include": [
     "./src/**/*.ts"

@@ -1,7 +1,7 @@
-import inMemoryDb from '../../db';
+import inMemoryDb from '../../db/index';
 import { IBoard } from './board.types';
 
-const tableName: string = 'BOARDS';
+const tableName = 'BOARDS';
 
 export const getAllBoards = async (): Promise<IBoard[]> =>
   inMemoryDb.getAllRows({ tableName });

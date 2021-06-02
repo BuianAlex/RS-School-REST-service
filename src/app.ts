@@ -35,9 +35,17 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
-app.use((err:express.ErrorRequestHandler, _req: express.Request, res:express.Response, _next:express.NextFunction) => {
-  console.error(err);
-  res.status(500).json({msg: 'Something broke!'});
-});
+app.use(
+  (
+    err: express.ErrorRequestHandler,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    console.error(err);
+    res.status(500).json({ msg: 'Something broke!' });
+    _next();
+  }
+);
 
-export default  app;
+export default app;

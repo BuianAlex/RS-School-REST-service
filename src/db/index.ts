@@ -4,6 +4,7 @@
  */
 import { IUser } from '../resources/users/user.types';
 import { ITask } from '../resources/tasks/task.types';
+import { IBoard } from '../resources/boards/board.types';
 import * as dbTypes from './db.types';
 
 export default (() => {
@@ -14,9 +15,9 @@ export default (() => {
   };
   const findIndex = ({ tableName, filter }: dbTypes.IFindIndex): number => {
     const dbTable = tables[tableName];
-    let rowIndex: number = -1;
+    let rowIndex = -1;
     if (dbTable) {
-      rowIndex = dbTable.findIndex((item: IUser | ITask) => {
+      rowIndex = dbTable.findIndex((item: IUser | ITask | IBoard) => {
         let filterResult = false;
         Object.keys(filter).forEach((keyName) => {
           if (item[keyName] === filter[keyName]) {
@@ -109,15 +110,16 @@ export default (() => {
       tableName,
       filter,
       newProps,
-    }: dbTypes.IUpdateManyRows): Promise<Number> => {
-      let calcUpdatedRows: number = 0;
+    }: dbTypes.IUpdateManyRows): Promise<number> => {
+      let calcUpdatedRows = 0;
       const dbTable = tables[tableName];
       if (dbTable) {
         const updatedArray: dbTypes.ITableRow[] = dbTable.map(
           (tableRow: dbTypes.ITableRow) => {
+            const updatedRow = tableRow;
             let shouldUpdate = false;
             Object.keys(filter).forEach((keyName) => {
-              if (tableRow[keyName] === filter[keyName]) {
+              if (updatedRow[keyName] === filter[keyName]) {
                 shouldUpdate = true;
               }
             });
@@ -125,12 +127,12 @@ export default (() => {
               Object.keys(newProps).forEach((key) => {
                 if (Object.prototype.hasOwnProperty.call(tableRow, key)) {
                   const newValue = newProps[key];
-                  tableRow[key] = newValue;
+                  updatedRow[key] = newValue;
                 }
               });
               calcUpdatedRows += 1;
             }
-            return tableRow;
+            return updatedRow;
           }
         );
         tables[tableName] = updatedArray;
@@ -197,7 +199,7 @@ export default (() => {
       let calcDeleted = 0;
       if (Array.isArray(dbTable)) {
         const newArray = dbTable.filter((row: dbTypes.IFilter) => {
-          let shouldDelete: boolean = false;
+          let shouldDelete = false;
           Object.keys(filter).forEach((keyName) => {
             if (row[keyName] === filter[keyName]) {
               shouldDelete = true;

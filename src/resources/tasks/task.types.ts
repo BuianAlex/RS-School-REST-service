@@ -1,12 +1,12 @@
-interface IBaseTask{
-  [key:string]:any
+interface IBaseTask {
+  [key: string]: string | null | number;
 }
-export interface ITask extends IBaseTask{
+export interface ITask extends IBaseTask {
   id: string;
   title: string;
   boardId: string;
   order: number;
   description: string;
-  userId: string| null;
+  userId: string | null;
   columnId: string;
 }

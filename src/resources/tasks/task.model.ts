@@ -32,13 +32,21 @@ class Task implements ITask {
     this.boardId = boardId;
     this.columnId = columnId;
   }
+
   [key: string]: string | number | null;
+
   id: string;
+
   title: string;
+
   boardId: string;
+
   order: number;
+
   description: string;
+
   userId: string|null;
+
   columnId: string;
 }
 
