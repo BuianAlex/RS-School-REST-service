@@ -41,8 +41,6 @@ router.route('/:userId').delete(async (req, res, next) => {
   const { userId } = req.params;
   try {
     const isSuccessful = await usersService.deleteUser(userId);
-    console.log(isSuccessful);
-
     if (typeof isSuccessful === 'boolean' && isSuccessful) {
       return res.status(204).json({ msg: 'The user has been deleted' });
     }
