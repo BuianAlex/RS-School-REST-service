@@ -2,6 +2,7 @@ import express from 'express';
 
 import User from './user.model';
 import * as usersService from './user.service';
+
 const router = express.Router();
 
 router.route('/').get(async (_req, res, next) => {
@@ -17,7 +18,7 @@ router.route('/:userId').get(async (req, res, next) => {
   const { userId } = req.params;
   try {
     const user = await usersService.findUser(userId);
-    if (typeof user !== 'boolean') {
+    if (user) {
       return res.json(User.toResponse(user));
     }
     return res.status(404).json({ msg: 'User not found' });
@@ -40,7 +41,9 @@ router.route('/:userId').delete(async (req, res, next) => {
   const { userId } = req.params;
   try {
     const isSuccessful = await usersService.deleteUser(userId);
-    if (typeof isSuccessful !== 'boolean') {
+    console.log(isSuccessful);
+
+    if (typeof isSuccessful === 'boolean' && isSuccessful) {
       return res.status(204).json({ msg: 'The user has been deleted' });
     }
     return res.status(404).json({ msg: 'User not found' });
@@ -53,7 +56,7 @@ router.route('/:userId').put(async (req, res, next) => {
   const { userId } = req.params;
   try {
     const userUpdated = await usersService.updateUser(userId, req.body);
-    if (typeof userUpdated !== 'boolean') {
+    if (userUpdated) {
       return res.json(User.toResponse(userUpdated));
     }
     return res.status(400).send('Bad request');

@@ -1,5 +1,10 @@
-export interface IBoard {
-  id:string;
+import { IColumn } from '../columns/columns.types';
+
+interface IBaseBoard {
+  [key: string]: any;
+}
+export interface IBoard extends IBaseBoard {
+  id: string;
   title: string;
-  columns: ;
+  columns: IColumn[];
 }

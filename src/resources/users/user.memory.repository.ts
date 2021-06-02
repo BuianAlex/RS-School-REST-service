@@ -13,16 +13,20 @@ export const getById = async (userID: UserID): Promise<IUser | null> =>
   inMemoryDb.find({ tableName, filter: { id: userID } });
 
 export const deleteUser = async (userID: UserID): Promise<boolean> => {
-  await inMemoryDb.delete({
+  const isDeleted =  await inMemoryDb.delete({
     tableName,
     filter: { id: userID },
   });
-  await inMemoryDb.updateManyRows({
+  if(isDeleted){
+    await inMemoryDb.updateManyRows({
     tableName: 'TASKS',
     filter: { userId: userID },
     newProps: { userId: null },
   });
   return true;
+  }
+  return false
+  
 };
 
 export const updateUser = async (

@@ -2,7 +2,6 @@
  * @module userService
  */
 import * as usersRepo from './user.memory.repository';
-import taskRepo from '../tasks/task.memory.repository';
 import User from './user.model';
 import { IUser, UserID } from './user.types';
 /**
@@ -36,17 +35,8 @@ export const findUser = async (userID: UserID): Promise<IUser | null> =>
  * @param {string} taskId User ID
  * @returns {Promise<Boolean>} Resolve true if not found - false
  */
-export const deleteUser = async (userID: UserID): Promise<boolean> => {
-  try {
-    const result = await usersRepo.deleteUser(userID);
-    if (result) {
-      await taskRepo.updateMany('userId', userID, null);
-    }
-    return result;
-  } catch (error) {
-    return error;
-  }
-};
+export const deleteUser = async (userID: UserID): Promise<boolean> => usersRepo.deleteUser(userID);
+
 /**
  * Find user by id and update
  * @param {string} userID User ID
