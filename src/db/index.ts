@@ -3,6 +3,7 @@
  * @description This function return methods for work with data base.
  */
 import { IUser } from '../resources/users/user.types';
+import { ITask } from '../resources/tasks/task.types';
 import * as dbTypes from './db.types';
 
 export default (() => {
@@ -15,7 +16,7 @@ export default (() => {
     const dbTable = tables[tableName];
     let rowIndex: number = -1;
     if (dbTable) {
-      rowIndex = dbTable.findIndex((item: dbTypes.ITableRow) => {
+      rowIndex = dbTable.findIndex((item: IUser | ITask) => {
         let filterResult = false;
         Object.keys(filter).forEach((keyName) => {
           if (item[keyName] === filter[keyName]) {
@@ -38,7 +39,7 @@ export default (() => {
      * @param {Object} param.data Data for add to the table
      * @returns {Promise<Object>} Resolve last added row in table
      */
-    addRow: async ({ tableName, data }: dbTypes.IAddRow): Promise<IUser> => {
+    addRow: async ({ tableName, data }: dbTypes.IAddRow): Promise<any> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         dbTable.push(data);
@@ -53,9 +54,7 @@ export default (() => {
      * @param {String} param.tableName Table name
      * @returns {Promise<Object>} Resolve array with table data
      */
-    getAllRows: async ({
-      tableName,
-    }: dbTypes.IGetAllRows): Promise<IUser[]> => {
+    getAllRows: async ({ tableName }: dbTypes.IGetAllRows): Promise<any> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         return dbTable;
@@ -75,7 +74,7 @@ export default (() => {
       tableName,
       filter,
       newProps,
-    }: dbTypes.IUpdateRow): Promise<IUser | null> => {
+    }: dbTypes.IUpdateRow): Promise<any> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });
@@ -95,7 +94,7 @@ export default (() => {
         }
         return null;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(`db ${tableName} not exist`);
     },
     /**
      * Find and update rows in db table that match filter
@@ -114,31 +113,30 @@ export default (() => {
       let calcUpdatedRows: number = 0;
       const dbTable = tables[tableName];
       if (dbTable) {
-        const updatedArray = dbTable.map((tableRow) => {
-          const newRow = tableRow;
-          let shouldUpdate = false;
-          Object.keys(filter).forEach((keyName) => {
-            if (tableRow[keyName] === filter[keyName]) {
-              shouldUpdate = true;
-            }
-          });
-          if (shouldUpdate) {
-            Object.keys(newProps).forEach((key) => {
-              if (Object.prototype.hasOwnProperty.call(newRow, key)) {
-                const newValue = newProps[key];
-                if (newValue) {
-                  newRow[key] = newValue;
-                }
+        const updatedArray: dbTypes.ITableRow[] = dbTable.map(
+          (tableRow: dbTypes.ITableRow) => {
+            let shouldUpdate = false;
+            Object.keys(filter).forEach((keyName) => {
+              if (tableRow[keyName] === filter[keyName]) {
+                shouldUpdate = true;
               }
             });
-            calcUpdatedRows += 1;
+            if (shouldUpdate) {
+              Object.keys(newProps).forEach((key) => {
+                if (Object.prototype.hasOwnProperty.call(tableRow, key)) {
+                  const newValue = newProps[key];
+                  tableRow[key] = newValue;
+                }
+              });
+              calcUpdatedRows += 1;
+            }
+            return tableRow;
           }
-          return newRow;
-        });
-        tables[tableName] = [...updatedArray];
+        );
+        tables[tableName] = updatedArray;
         return calcUpdatedRows;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(`db ${tableName} not exist`);
     },
     /**
      * Find a row in db table that match filter
@@ -148,10 +146,7 @@ export default (() => {
      * @param {Object} param.filter Parameters for row search
      * @returns  Resolve found row or if not found - false
      */
-    find: async ({
-      tableName,
-      filter,
-    }: dbTypes.IFind): Promise<IUser | null> => {
+    find: async ({ tableName, filter }: dbTypes.IFind): Promise<any> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });
@@ -164,7 +159,7 @@ export default (() => {
         }
         return null;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(`db ${tableName} not exist`);
     },
     /**
      * Find and delete a row in db table that match filter
@@ -174,7 +169,7 @@ export default (() => {
      * @param {Object} param.filter Parameters for row search
      * @returns {Promise<Boolean>} Resolve true or if not found - false
      */
-    delete: async ({ tableName, filter }: dbTypes.IFind): Promise<Boolean> => {
+    delete: async ({ tableName, filter }: dbTypes.IFind): Promise<boolean> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });
@@ -184,7 +179,7 @@ export default (() => {
         }
         return false;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(`db ${tableName} not exist`);
     },
     /**
      * Find and delete rows in db table that match filter
@@ -197,24 +192,27 @@ export default (() => {
     deleteMany: async ({
       tableName,
       filter,
-    }: dbTypes.IFind): Promise<boolean> => {
+    }: dbTypes.IFind): Promise<number> => {
       const dbTable = tables[tableName];
-      if (dbTable) {
-        const newArray = dbTable.filter((row) => {
-          let shouldDelete = false;
+      let calcDeleted = 0;
+      if (Array.isArray(dbTable)) {
+        const newArray = dbTable.filter((row: dbTypes.IFilter) => {
+          let shouldDelete: boolean = false;
           Object.keys(filter).forEach((keyName) => {
             if (row[keyName] === filter[keyName]) {
               shouldDelete = true;
             }
           });
           if (shouldDelete) {
+            calcDeleted += 1;
             return false;
           }
           return true;
         });
-        tables[tableName] = [...newArray];
+        tables[tableName] = newArray;
+        return calcDeleted;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(`db table ${tableName} not exist`);
     },
   };
 })();
