@@ -1,11 +1,11 @@
-interface IBaseUser{
-  [key:string]:string
+interface IBaseUser {
+  [key: string]: any;
 }
 export interface IUser extends IBaseUser {
   id: string;
-  name: string,
-  login: string,
-  password: string,
+  name: string;
+  login: string;
+  password: string;
 }
 
 export type UserID = string;

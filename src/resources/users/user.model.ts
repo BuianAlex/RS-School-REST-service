@@ -32,8 +32,6 @@ class User implements IUser {
     this.password = password;
   }
 
-  [key: string]: string;
-
   /**
    * Function toResponse clearing object user for response
    *

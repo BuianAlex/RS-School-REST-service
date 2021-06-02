@@ -14,6 +14,20 @@ class Task implements ITask {
    * @param {string} taskData.userId Owner User ID
    * @param {string} taskData.columnId Column ID with belong task
    */
+  id: string;
+
+  title: string;
+
+  boardId: string;
+
+  order: number;
+
+  description: string;
+
+  userId: string | null;
+
+  columnId: string;
+
   constructor({
     id = uuidv4(),
     title = 'testTask',
@@ -32,22 +46,6 @@ class Task implements ITask {
     this.boardId = boardId;
     this.columnId = columnId;
   }
-
-  [key: string]: string | number | null;
-
-  id: string;
-
-  title: string;
-
-  boardId: string;
-
-  order: number;
-
-  description: string;
-
-  userId: string|null;
-
-  columnId: string;
 }
 
 export default Task;

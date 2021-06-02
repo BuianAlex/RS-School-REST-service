@@ -1,5 +1,5 @@
 interface IBaseTask {
-  [key: string]: string | null | number;
+  [key: string]: any;
 }
 export interface ITask extends IBaseTask {
   id: string;
