@@ -1,4 +1,5 @@
 import express from 'express';
+import * as httpCodes from '../../common/statusCodes';
 
 import User from './user.model';
 import * as usersService from './user.service';
@@ -8,7 +9,8 @@ const router = express.Router();
 router.route('/').get(async (_req, res, next) => {
   try {
     const users = await usersService.getAll();
-    return res.json(users.map(User.toResponse));
+    // throw new Error();
+    setTimeout(() => res.json(users.map(User.toResponse)), 2000);
   } catch (error) {
     return next(error);
   }
@@ -21,7 +23,7 @@ router.route('/:userId').get(async (req, res, next) => {
     if (user) {
       return res.json(User.toResponse(user));
     }
-    return res.status(404).json({ msg: 'User not found' });
+    return res.status(httpCodes.NotFound).json({ msg: 'User not found' });
   } catch (error) {
     return next(error);
   }
@@ -30,7 +32,7 @@ router.route('/:userId').get(async (req, res, next) => {
 router.route('/').post(async (req, res, next) => {
   try {
     const newUser = await usersService.createUser(req.body);
-    res.status(201);
+    res.status(httpCodes.Created);
     return res.json(User.toResponse(newUser));
   } catch (error) {
     return next(error);
@@ -42,9 +44,11 @@ router.route('/:userId').delete(async (req, res, next) => {
   try {
     const isSuccessful = await usersService.deleteUser(userId);
     if (typeof isSuccessful === 'boolean' && isSuccessful) {
-      return res.status(204).json({ msg: 'The user has been deleted' });
+      return res
+        .status(httpCodes.Deleted)
+        .json({ msg: 'The user has been deleted' });
     }
-    return res.status(404).json({ msg: 'User not found' });
+    return res.status(httpCodes.NotFound).json({ msg: 'User not found' });
   } catch (error) {
     return next(error);
   }
@@ -57,7 +61,7 @@ router.route('/:userId').put(async (req, res, next) => {
     if (userUpdated) {
       return res.json(User.toResponse(userUpdated));
     }
-    return res.status(400).send('Bad request');
+    return res.status(httpCodes.BadRequest).send('Bad request');
   } catch (error) {
     return next(error);
   }

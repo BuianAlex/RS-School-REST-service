@@ -1,5 +1,7 @@
 import express from 'express';
+
 import * as taskService from './task.service';
+import * as httpCodes from '../../common/statusCodes';
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.route('/:boardId/tasks/:taskId').get(async (req, res, next) => {
     if (task) {
       return res.json(task);
     }
-    return res.status(404).send('Task not found');
+    return res.status(httpCodes.NotFound).send('Task not found');
   } catch (error) {
     return next(error);
   }
@@ -31,7 +33,7 @@ router.route('/:boardId/tasks').post(async (req, res, next) => {
   taskData.boardId = boardId;
   try {
     const newTask = await taskService.createTask(taskData);
-    res.status(201);
+    res.status(httpCodes.Created);
     return res.json(newTask);
   } catch (error) {
     return next(error);
@@ -43,9 +45,9 @@ router.route('/:boardId/tasks/:taskId').delete(async (req, res, next) => {
   try {
     const isSuccessful = await taskService.deleteTask(taskId);
     if (isSuccessful) {
-      return res.status(204).send('The task has been deleted');
+      return res.status(httpCodes.Deleted).send('The task has been deleted');
     }
-    return res.status(404).send('Task not found');
+    return res.status(httpCodes.NotFound).send('Task not found');
   } catch (error) {
     return next(error);
   }
@@ -58,7 +60,7 @@ router.route('/:boardId/tasks/:taskId').put(async (req, res, next) => {
     if (taskUpdated) {
       return res.json(taskUpdated);
     }
-    return res.status(404).send('Task not found');
+    return res.status(httpCodes.NotFound).send('Task not found');
   } catch (error) {
     return next(error);
   }

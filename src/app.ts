@@ -4,8 +4,8 @@ import path from 'path';
 import express from 'express';
 import swaggerUI from 'swagger-ui-express';
 import YAML from 'yamljs';
-import morgan from 'morgan';
 
+import accessLogger from './middleware/accessLogger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
@@ -19,7 +19,7 @@ const accessLogStream = fs.createWriteStream(
 );
 
 app.use(express.json());
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(accessLogger(accessLogStream));
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
