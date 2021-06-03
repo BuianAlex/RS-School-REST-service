@@ -1,16 +1,16 @@
 import express from 'express';
-import * as httpCodes from '../../common/statusCodes';
 
 import User from './user.model';
 import * as usersService from './user.service';
+import { responseHandler } from '../../common/responseHandler';
 
 const router = express.Router();
 
 router.route('/').get(async (_req, res, next) => {
   try {
     const users = await usersService.getAll();
-    // throw new Error();
-    setTimeout(() => res.json(users.map(User.toResponse)), 2000);
+    const dataToSend = users.map(User.toResponse);
+    return responseHandler(res).successful(dataToSend);
   } catch (error) {
     return next(error);
   }
@@ -21,9 +21,10 @@ router.route('/:userId').get(async (req, res, next) => {
   try {
     const user = await usersService.findUser(userId);
     if (user) {
-      return res.json(User.toResponse(user));
+      const dataToSend = User.toResponse(user);
+      return responseHandler(res).successful(dataToSend);
     }
-    return res.status(httpCodes.NotFound).json({ msg: 'User not found' });
+    return responseHandler(res).notFound();
   } catch (error) {
     return next(error);
   }
@@ -32,8 +33,8 @@ router.route('/:userId').get(async (req, res, next) => {
 router.route('/').post(async (req, res, next) => {
   try {
     const newUser = await usersService.createUser(req.body);
-    res.status(httpCodes.Created);
-    return res.json(User.toResponse(newUser));
+    const dataToSend = User.toResponse(newUser);
+    return responseHandler(res).created(dataToSend);
   } catch (error) {
     return next(error);
   }
@@ -44,11 +45,9 @@ router.route('/:userId').delete(async (req, res, next) => {
   try {
     const isSuccessful = await usersService.deleteUser(userId);
     if (typeof isSuccessful === 'boolean' && isSuccessful) {
-      return res
-        .status(httpCodes.Deleted)
-        .json({ msg: 'The user has been deleted' });
+      return responseHandler(res).deleted();
     }
-    return res.status(httpCodes.NotFound).json({ msg: 'User not found' });
+    return responseHandler(res).notFound();
   } catch (error) {
     return next(error);
   }
@@ -59,9 +58,10 @@ router.route('/:userId').put(async (req, res, next) => {
   try {
     const userUpdated = await usersService.updateUser(userId, req.body);
     if (userUpdated) {
-      return res.json(User.toResponse(userUpdated));
+      const dataToSend = User.toResponse(userUpdated);
+      return responseHandler(res).updated(dataToSend);
     }
-    return res.status(httpCodes.BadRequest).send('Bad request');
+    return responseHandler(res).badRequest();
   } catch (error) {
     return next(error);
   }

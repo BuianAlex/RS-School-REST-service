@@ -21,6 +21,11 @@ const accessLogStream = fs.createWriteStream(
 app.use(express.json());
 app.use(accessLogger(accessLogStream));
 
+// app.use((_req, _res, next) => {
+//   throw new Error('Dfdfd');
+//   next();
+// });
+
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 app.use('/', (req, res, next) => {

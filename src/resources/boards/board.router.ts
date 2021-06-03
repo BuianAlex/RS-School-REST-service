@@ -1,12 +1,14 @@
 import express from 'express';
+
 import * as boardsService from './board.service';
+import { responseHandler } from '../../common/responseHandler';
 
 const router = express.Router();
 
 router.route('/').get(async (_req, res, next) => {
   try {
     const boards = await boardsService.getAllBoards();
-    return res.json(boards);
+    return responseHandler(res).successful(boards);
   } catch (error) {
     return next(error);
   }
@@ -17,9 +19,9 @@ router.route('/:boardId').get(async (req, res, next) => {
   try {
     const board = await boardsService.findBoard(boardId);
     if (board) {
-      return res.json(board);
+      return responseHandler(res).successful(board);
     }
-    return res.status(404).send('Board not found');
+    return responseHandler(res).notFound();
   } catch (error) {
     return next(error);
   }
@@ -28,8 +30,7 @@ router.route('/:boardId').get(async (req, res, next) => {
 router.route('/').post(async (req, res, next) => {
   try {
     const newBoard = await boardsService.createBoard(req.body);
-    res.status(201);
-    return res.json(newBoard);
+    return responseHandler(res).created(newBoard);
   } catch (error) {
     return next(error);
   }
@@ -40,9 +41,9 @@ router.route('/:boardId').delete(async (req, res, next) => {
   try {
     const isSuccessful = await boardsService.deleteBoard(boardId);
     if (isSuccessful) {
-      return res.status(204).send('The board has been deleted');
+      return responseHandler(res).deleted();
     }
-    return res.status(404).send('Board not found');
+    return responseHandler(res).notFound();
   } catch (error) {
     return next(error);
   }
@@ -53,9 +54,9 @@ router.route('/:boardId').put(async (req, res, next) => {
   try {
     const boardUpdated = await boardsService.updateBoard(boardId, req.body);
     if (boardUpdated) {
-      return res.json(boardUpdated);
+      return responseHandler(res).updated(boardUpdated);
     }
-    return res.status(400).send('Bad request');
+    return responseHandler(res).badRequest();
   } catch (error) {
     return next(error);
   }
