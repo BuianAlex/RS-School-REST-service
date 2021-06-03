@@ -35,6 +35,11 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
+app.use((_req, res, next) => {
+  res.status(404).send("Sorry can't find that!");
+  next();
+});
+
 app.use(
   (
     err: express.ErrorRequestHandler,
