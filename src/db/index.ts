@@ -14,7 +14,7 @@ export default (() => {
     USERS: [],
   };
   const dbErrorHandler = (tableName: string): string =>
-    `db ${tableName} not exist`;
+    `DB_ERROR table ${tableName} not exist`;
 
   const findIndex = ({ tableName, filter }: dbTypes.IFindIndex): number => {
     const dbTable = tables[tableName];

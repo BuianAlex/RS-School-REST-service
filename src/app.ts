@@ -10,19 +10,18 @@ import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 import { responseHandler } from './common/responseHandler';
 import logStreamCreator from './common/logStreamCreator';
+import ErrorLogger from './middleware/errorLogger';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 const accessLogStream = logStreamCreator('access.log');
+const appErrorLogStream = logStreamCreator('error.log');
+const errorLogger = ErrorLogger(appErrorLogStream);
 
 app.use(express.json());
-app.use(accessLogger(accessLogStream));
 
-// app.use((_req, _res, _next) => {
-//   throw new Error('Dfdfd');
-//   // next();
-// });
+app.use(accessLogger(accessLogStream));
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
@@ -45,15 +44,28 @@ app.use((_req, res, next) => {
 
 app.use(
   (
-    err: express.ErrorRequestHandler,
+    err: Error,
     _req: express.Request,
     res: express.Response,
     _next: express.NextFunction
   ) => {
-    console.error(err);
+    errorLogger(err);
     responseHandler(res).internalServerError();
     _next();
   }
 );
+
+process
+  .on('unhandledRejection', (error: Error, _p) => {
+    const updatedError = error;
+    updatedError.message = `UnhandledRejection ${error.message}`;
+    errorLogger(updatedError);
+  })
+  .on('uncaughtException', (error) => {
+    const updatedError = error;
+    updatedError.message = `UnhandledRejection ${error.message}`;
+    errorLogger(updatedError);
+    process.exit(1);
+  });
 
 export default app;
