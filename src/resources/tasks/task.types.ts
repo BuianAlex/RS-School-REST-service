@@ -1,6 +1,4 @@
-interface IBaseTask {
-  [key: string]: any;
-}
+type IBaseTask = Record<string, unknown>;
 export interface ITask extends IBaseTask {
   id: string;
   title: string;

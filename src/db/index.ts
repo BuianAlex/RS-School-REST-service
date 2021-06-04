@@ -13,6 +13,9 @@ export default (() => {
     TASKS: [],
     USERS: [],
   };
+  const dbErrorHandler = (tableName: string): string =>
+    `db ${tableName} not exist`;
+
   const findIndex = ({ tableName, filter }: dbTypes.IFindIndex): number => {
     const dbTable = tables[tableName];
     let rowIndex = -1;
@@ -27,7 +30,6 @@ export default (() => {
         return filterResult;
       });
     }
-
     return rowIndex;
   };
 
@@ -41,12 +43,13 @@ export default (() => {
      * @returns {Promise<Object>} Resolve last added row in table
      */
     addRow: async ({ tableName, data }: dbTypes.IAddRow): Promise<any> => {
+      // eslint-disable-next-line dot-notation
       const dbTable = tables[tableName];
       if (dbTable) {
         dbTable.push(data);
         return data;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Get all row from db table
@@ -60,7 +63,7 @@ export default (() => {
       if (dbTable) {
         return dbTable;
       }
-      throw new Error(`db ${tableName} nor exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Find and update one row in db table
@@ -95,7 +98,7 @@ export default (() => {
         }
         return null;
       }
-      throw new Error(`db ${tableName} not exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Find and update rows in db table that match filter
@@ -114,8 +117,8 @@ export default (() => {
       let calcUpdatedRows = 0;
       const dbTable = tables[tableName];
       if (dbTable) {
-        const updatedArray: dbTypes.ITableRow[] = dbTable.map(
-          (tableRow: dbTypes.ITableRow) => {
+        const updatedArray: dbTypes.TableRow[] = dbTable.map(
+          (tableRow: dbTypes.TableRow) => {
             const updatedRow = tableRow;
             let shouldUpdate = false;
             Object.keys(filter).forEach((keyName) => {
@@ -138,7 +141,7 @@ export default (() => {
         tables[tableName] = updatedArray;
         return calcUpdatedRows;
       }
-      throw new Error(`db ${tableName} not exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Find a row in db table that match filter
@@ -161,7 +164,7 @@ export default (() => {
         }
         return null;
       }
-      throw new Error(`db ${tableName} not exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Find and delete a row in db table that match filter
@@ -181,7 +184,7 @@ export default (() => {
         }
         return false;
       }
-      throw new Error(`db ${tableName} not exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
     /**
      * Find and delete rows in db table that match filter
@@ -214,7 +217,7 @@ export default (() => {
         tables[tableName] = newArray;
         return calcDeleted;
       }
-      throw new Error(`db table ${tableName} not exist`);
+      throw new Error(dbErrorHandler(tableName));
     },
   };
 })();

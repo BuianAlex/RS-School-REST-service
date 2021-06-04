@@ -12,10 +12,20 @@ interface IHandler {
   notFound: () => void;
   internalServerError: () => void;
 }
-
+/**
+ * @module responseHandler
+ * 
+ * @param res express Response
+ * @returns function 
+ */
 export const responseHandler = (res: express.Response): IHandler =>
   // ...
   ({
+    /**
+     * Send response with status 200 and data in json  
+     * @param data 
+     * @returns void
+     */
     successful: (data) => res.json(data),
     created: (data) => res.status(201).json(data),
     deleted: () => res.status(204).json({ message: 'Deleted' }),

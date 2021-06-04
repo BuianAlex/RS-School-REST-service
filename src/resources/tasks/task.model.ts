@@ -28,6 +28,8 @@ class Task implements ITask {
 
   columnId: string;
 
+  [x: string]: unknown;
+
   constructor({
     id = uuidv4(),
     title = 'testTask',

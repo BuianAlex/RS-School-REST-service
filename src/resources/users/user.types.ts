@@ -1,6 +1,4 @@
-interface IBaseUser {
-  [key: string]: any;
-}
+type IBaseUser = Record<string, unknown>;
 export interface IUser extends IBaseUser {
   id: string;
   name: string;

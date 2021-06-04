@@ -1,5 +1,3 @@
-import statusCodes from '../common/statusCodes';
-
 class HttpError extends Error {
   message: string;
 
@@ -8,7 +6,7 @@ class HttpError extends Error {
   constructor(message: string) {
     super();
     this.message = message;
-    this.status = statusCodes[this.message];
+    this.status = 0;
   }
 
   toJSON(): { status: number | undefined; message: string } {

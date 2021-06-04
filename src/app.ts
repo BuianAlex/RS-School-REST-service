@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 
 import express from 'express';
@@ -9,21 +8,20 @@ import accessLogger from './middleware/accessLogger';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
+import { responseHandler } from './common/responseHandler';
+import logStreamCreator from './common/logStreamCreator';
 
 const app = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, '../log/access.log'),
-  { flags: 'a' }
-);
+const accessLogStream = logStreamCreator('access.log');
 
 app.use(express.json());
 app.use(accessLogger(accessLogStream));
 
-// app.use((_req, _res, next) => {
+// app.use((_req, _res, _next) => {
 //   throw new Error('Dfdfd');
-//   next();
+//   // next();
 // });
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
@@ -41,7 +39,7 @@ app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
 
 app.use((_req, res, next) => {
-  res.status(404).send("Sorry can't find that!");
+  responseHandler(res).notFound();
   next();
 });
 
@@ -53,7 +51,7 @@ app.use(
     _next: express.NextFunction
   ) => {
     console.error(err);
-    res.status(500).json({ msg: 'Something broke!' });
+    responseHandler(res).internalServerError();
     _next();
   }
 );

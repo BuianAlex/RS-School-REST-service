@@ -12,6 +12,8 @@ class Board implements IBoard {
 
   columns: IColumn[];
 
+  [x: string]: unknown;
+
   /**
    * Create a board.
    * @param {string} id Board ID

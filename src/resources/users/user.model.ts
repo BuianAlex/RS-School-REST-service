@@ -12,6 +12,8 @@ class User implements IUser {
   login: string;
 
   password: string;
+
+  [x: string]: unknown;
   /**
    * @param {Object} object  User data
    * @param {string} object.id  User id automatically generated

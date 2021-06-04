@@ -1,8 +1,6 @@
 import { IColumn } from '../columns/columns.types';
 
-interface IBaseBoard {
-  [key: string]: any;
-}
+type IBaseBoard = Record<string, unknown>;
 export interface IBoard extends IBaseBoard {
   id: string;
   title: string;

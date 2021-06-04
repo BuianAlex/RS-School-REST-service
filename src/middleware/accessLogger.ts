@@ -3,7 +3,16 @@ import os from 'os';
 
 import express from 'express';
 import moment from 'moment';
-
+/**
+ * @module  accessLogger
+ * Function for log requests
+ * @param fileStream  Write stream to log file
+ * @returns Function
+ * @param req Express request
+ * @param res Express response
+ * @param next Express nextFunction
+ * @returns void
+ */
 export default (
   fileStream: fs.WriteStream
 ): ((

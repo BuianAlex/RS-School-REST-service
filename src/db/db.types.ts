@@ -2,14 +2,9 @@ import { IUser } from '../resources/users/user.types';
 import { ITask } from '../resources/tasks/task.types';
 import { IBoard } from '../resources/boards/board.types';
 
-export interface ITableRow {
-  [key: string]: any;
-}
+export type TableRow = Record<string, unknown>;
 
-export interface ITablesBase {
-  [key: string]: any;
-}
-
+type ITablesBase = Record<string, any>;
 export interface ITables extends ITablesBase {
   BOARDS: IBoard[];
   TASKS: ITask[];
