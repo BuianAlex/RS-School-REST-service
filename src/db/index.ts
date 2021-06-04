@@ -2,9 +2,9 @@
  * @module inMemoryDb
  * @description This function return methods for work with data base.
  */
-import { IUser } from '../resources/users/user.types';
-import { ITask } from '../resources/tasks/task.types';
-import { IBoard } from '../resources/boards/board.types';
+// import { IUser } from '../resources/users/user.types';
+// import { ITask } from '../resources/tasks/task.types';
+// import { IBoard } from '../resources/boards/board.types';
 import * as dbTypes from './db.types';
 
 export default (() => {
@@ -20,7 +20,7 @@ export default (() => {
     const dbTable = tables[tableName];
     let rowIndex = -1;
     if (dbTable) {
-      rowIndex = dbTable.findIndex((item: IUser | ITask | IBoard) => {
+      rowIndex = dbTable.findIndex((item: Record<string, unknown>) => {
         let filterResult = false;
         Object.keys(filter).forEach((keyName) => {
           if (item[keyName] === filter[keyName]) {
@@ -58,7 +58,7 @@ export default (() => {
      * @param {String} param.tableName Table name
      * @returns {Promise<Object>} Resolve array with table data
      */
-    getAllRows: async ({ tableName }: dbTypes.IGetAllRows): Promise<any> => {
+    getAllRows: async ({ tableName }: dbTypes.IGetAllRows): Promise<any[]> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         return dbTable;
@@ -78,7 +78,7 @@ export default (() => {
       tableName,
       filter,
       newProps,
-    }: dbTypes.IUpdateRow): Promise<any> => {
+    }: dbTypes.IUpdateRow): Promise<any | null> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });

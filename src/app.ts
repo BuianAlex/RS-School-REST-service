@@ -56,14 +56,14 @@ app.use(
 );
 
 process
-  .on('unhandledRejection', (error: Error, _p) => {
+  .on('unhandledRejection', (error: Error) => {
     const updatedError = error;
     updatedError.message = `UnhandledRejection ${error.message}`;
     errorLogger(updatedError);
   })
   .on('uncaughtException', (error) => {
     const updatedError = error;
-    updatedError.message = `UnhandledRejection ${error.message}`;
+    updatedError.message = `UncaughtException ${error.message}`;
     errorLogger(updatedError);
     process.exit(1);
   });
