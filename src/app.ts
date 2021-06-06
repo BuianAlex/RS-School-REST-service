@@ -61,20 +61,15 @@ app.use(
 
 process
   .on('unhandledRejection', (error: Error) => {
-    const updatedError = error;
-    updatedError.message = `UnhandledRejection ${error.message}`;
-    errorLogger(updatedError);
+    const rejectionError = error;
+    rejectionError.message = `UnhandledRejection ${error.message}`;
+    errorLogger(rejectionError, true);
   })
   .on('uncaughtException', (error) => {
-    console.log('dfddf');
-
-    const updatedError = error;
-    updatedError.message = `UncaughtException ${error.message}`;
-    errorLogger(updatedError);
-    appErrorLogStream.on('close', () => {
-      process.exit(1);
-    });
+    const exceptionError = error;
+    exceptionError.message = `UncaughtException ${error.message}`;
+    errorLogger(exceptionError, true);
   });
-throw Error('Oops!');
+// throw Error('Oops!');
 // Promise.reject(Error('Oops!'));
 export default app;

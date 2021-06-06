@@ -4,7 +4,7 @@ import os from 'os';
 import moment from 'moment';
 /**
  * @module  errorLogger
- * Function for log add errors
+ * Function for log  errors
  * @param fileStream  Write stream to log file
  * @returns Function
  * @param error Error object
@@ -12,11 +12,15 @@ import moment from 'moment';
  */
 export default (
   fileStream: fs.WriteStream
-): (( error: Error | Record<string, unknown>) => void) => {
+): ((error: Error | Record<string, unknown>, isCritical?: boolean) => void) => {
   const timeNow = moment().format();
-  return (error) => {
+  return (error, isCritical = false) => {
     const { message, stack } = error;
     const logRow = JSON.stringify({ time: timeNow, message, stack });
-    fileStream.write(logRow + os.EOL);
+    fileStream.write(logRow + os.EOL, () => {
+      if (isCritical) {
+        process.exit(1);
+      }
+    });
   };
 };
