@@ -2,6 +2,7 @@ import express from 'express';
 
 import * as boardsService from './board.service';
 import { responseHandler } from '../../common/responseHandler';
+import HttpError, { NOT_FOUND, BAD_REQUEST } from '../../middleware/httpErrors';
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.route('/:boardId').get(async (req, res, next) => {
     if (board) {
       return responseHandler(res).successful(board);
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -43,7 +44,7 @@ router.route('/:boardId').delete(async (req, res, next) => {
     if (isSuccessful) {
       return responseHandler(res).deleted();
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -56,7 +57,7 @@ router.route('/:boardId').put(async (req, res, next) => {
     if (boardUpdated) {
       return responseHandler(res).updated(boardUpdated);
     }
-    return responseHandler(res).badRequest();
+    throw new HttpError(BAD_REQUEST);
   } catch (error) {
     return next(error);
   }

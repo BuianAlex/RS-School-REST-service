@@ -2,6 +2,7 @@ import express from 'express';
 
 import * as taskService from './task.service';
 import { responseHandler } from '../../common/responseHandler';
+import HttpError, { NOT_FOUND, BAD_REQUEST } from '../../middleware/httpErrors';
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.route('/:boardId/tasks/:taskId').get(async (req, res, next) => {
     if (task) {
       return responseHandler(res).successful(task);
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -46,7 +47,7 @@ router.route('/:boardId/tasks/:taskId').delete(async (req, res, next) => {
     if (isSuccessful) {
       return responseHandler(res).deleted();
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -59,7 +60,7 @@ router.route('/:boardId/tasks/:taskId').put(async (req, res, next) => {
     if (taskUpdated) {
       return responseHandler(res).updated(taskUpdated);
     }
-    return responseHandler(res).badRequest();
+    throw new HttpError(BAD_REQUEST);
   } catch (error) {
     return next(error);
   }

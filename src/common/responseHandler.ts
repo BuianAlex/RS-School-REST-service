@@ -1,15 +1,14 @@
 import express from 'express';
+import HttpError from '../middleware/httpErrors';
 
 type dataType = Record<string, unknown> | Record<string, unknown>[];
 
 interface IHandler {
   successful: (data: dataType) => void;
   created: (data: dataType) => void;
-  badRequest: (message?: string) => void;
   deleted: (message?: string) => void;
   updated: (data: dataType) => void;
-  forbidden: (message?: string) => void;
-  notFound: (message?: string) => void;
+  httpError: (error: HttpError) => void;
   internalServerError: (message?: string) => void;
 }
 /**
@@ -43,13 +42,6 @@ export const responseHandler = (res: express.Response): IHandler =>
      */
     deleted: () => res.status(204).json({ message: 'Deleted' }),
     /**
-     * @function badRequest()
-     * When req is not valid send response with status 400 and data in json
-     * @param message Optional parameter, by default - BadRequest
-     * @returns void
-     */
-    badRequest: (message = 'BadRequest') => res.status(400).json({ message }),
-    /**
      * @function updated()
      * When req for update is successful send response with status 200 and data in json
      * @param data
@@ -57,19 +49,15 @@ export const responseHandler = (res: express.Response): IHandler =>
      */
     updated: (data) => res.json(data),
     /**
-     * @function forbidden()
-     * When req is forbidden send response with status 401 and data in json
-     * @param message Optional parameter, by default - Forbidden
+     * @function httpError()
+     * Handling httpError
+     * @param err
+     * @param err.statusCode
+     * @param err.message
+     * @param err.toJSON return object with error statusCode and message
      * @returns void
      */
-    forbidden: (message = 'Forbidden') => res.status(401).json({ message }),
-    /**
-     * @function notFound()
-     * When page of data not found send response with status 404 and data in json
-     * @param message Optional parameter, by default - NotFound
-     * @returns void
-     */
-    notFound: (message = 'NotFound') => res.status(404).json({ message }),
+    httpError: (err) => res.status(err.statusCode).json(err.toJSON()),
     /**
      * @function internalServerError()
      * When internal Server Error send response with status 500 and data in json

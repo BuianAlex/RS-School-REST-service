@@ -1,8 +1,10 @@
+/* eslint-disable dot-notation */
 import express from 'express';
 
 import User from './user.model';
 import * as usersService from './user.service';
 import { responseHandler } from '../../common/responseHandler';
+import HttpError, { NOT_FOUND, BAD_REQUEST } from '../../middleware/httpErrors';
 
 const router = express.Router();
 
@@ -24,7 +26,7 @@ router.route('/:userId').get(async (req, res, next) => {
       const dataToSend = User.toResponse(user);
       return responseHandler(res).successful(dataToSend);
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -47,7 +49,7 @@ router.route('/:userId').delete(async (req, res, next) => {
     if (typeof isSuccessful === 'boolean' && isSuccessful) {
       return responseHandler(res).deleted();
     }
-    return responseHandler(res).notFound();
+    throw new HttpError(NOT_FOUND);
   } catch (error) {
     return next(error);
   }
@@ -61,7 +63,7 @@ router.route('/:userId').put(async (req, res, next) => {
       const dataToSend = User.toResponse(userUpdated);
       return responseHandler(res).updated(dataToSend);
     }
-    return responseHandler(res).badRequest();
+    throw new HttpError(BAD_REQUEST);
   } catch (error) {
     return next(error);
   }
