@@ -26,19 +26,19 @@ export const createBoard = (boardData: IBoard): Promise<IBoard> => {
 /**
  * Find a board by ID
  * @async
- * @param {String} boardId  Board ID
- * @returns {Promise<(Object|Boolean)>} Resolve board object if board not found - false
+ * @param {String} boardID  Board ID
+ * @returns {Promise<(Board|Boolean)>} Resolve board object if board not found - false
  */
-export const findBoard = (boardId: string): Promise<IBoard | null> =>
-  boardsRepo.findBoard(boardId);
+export const findBoard = (boardID: string): Promise<IBoard | null> =>
+  boardsRepo.findBoard(boardID);
 /**
  * Delete board by id
  * @async
- * @param {String} boardId  Board ID
+ * @param {String} boardID  Board ID
  * @returns {Promise<Boolean>} Resolve true if board not found - false
  */
-export const deleteBoard = async (boardId: string): Promise<boolean> =>
-  boardsRepo.deleteBoard(boardId);
+export const deleteBoard = async (boardID: string): Promise<boolean> =>
+  boardsRepo.deleteBoard(boardID);
 /**
  * Find board by id and update
  * @async

@@ -51,12 +51,12 @@ export default (): IAppLogger => {
       });
       next();
     },
-    errorLogger: (error: Error, isCritical = false) => {
+    errorLogger: (error: Error, exitOnError = false) => {
       const timeNow = moment().format();
       const { message, stack } = error;
       const logRow = JSON.stringify({ time: timeNow, message, stack });
       appErrorLogStream.write(logRow + os.EOL, () => {
-        if (isCritical) {
+        if (exitOnError) {
           process.exit(1);
         }
       });

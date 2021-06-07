@@ -28,21 +28,21 @@ export const createTask = (taskData: ITask): Promise<ITask> => {
 };
 /**
  * Find task by ID
- * @param {string} taskId Task ID
- * @returns {Promise<(Task|Boolean)>} Resolve in object of task if not found - false
+ * @param {string} taskID Task ID
+ * @returns {Promise<(Task|null)>} Resolve in object of task if not found - false
  */
-export const findTask = (taskId: string): Promise<ITask | null> =>
-  tasksRepo.findTask(taskId);
+export const findTask = (taskID: string): Promise<ITask | null> =>
+  tasksRepo.findTask(taskID);
 /**
  * Delete task by ID
- * @param {string} taskId Task ID
+ * @param {string} taskID Task ID
  * @returns {Promise<Boolean>} Resolve true if not found - false
  */
-export const deleteTask = (taskId: string): Promise<boolean> =>
-  tasksRepo.deleteTask(taskId);
+export const deleteTask = (taskID: string): Promise<boolean> =>
+  tasksRepo.deleteTask(taskID);
 /**
  * Find task by id and update
- * @param {string} taskId
+ * @param {string} taskID
  * @param {Object} newProps Prors for update task
  * @param {string} newProps.title Title of task
  * @param {number} newProps.order Order for showing
@@ -52,6 +52,6 @@ export const deleteTask = (taskId: string): Promise<boolean> =>
  * @returns {Promise<(Task|null)>} Resolve updated task if not found - false
  */
 export const updateTask = (
-  taskId: string,
+  taskID: string,
   newProps: ITask
-): Promise<ITask | null> => tasksRepo.updateTask(taskId, newProps);
+): Promise<ITask | null> => tasksRepo.updateTask(taskID, newProps);

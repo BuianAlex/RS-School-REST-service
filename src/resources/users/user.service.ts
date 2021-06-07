@@ -7,7 +7,7 @@ import { IUser, UserID } from './user.types';
 /**
  * Get all users from the db
  * @async
- * @returns {Promise<Array>} Resolve in array of user objects
+ * @returns {Promise<User[]>} Resolve in array of user objects
  */
 export const getAll = async (): Promise<IUser[]> => usersRepo.getAllUsers();
 /**
@@ -17,7 +17,7 @@ export const getAll = async (): Promise<IUser[]> => usersRepo.getAllUsers();
  * @param {string} userData.name  User name
  * @param {string} userData.login User login
  * @param {string} userData.password User password
- * @returns {Promise<Object>} Resolve in object of new user
+ * @returns {Promise<User>} Resolve in object of new user
  */
 export const createUser = async (userData: IUser): Promise<IUser> => {
   const newUser = new User(userData);
@@ -26,16 +26,17 @@ export const createUser = async (userData: IUser): Promise<IUser> => {
 /**
  * Find user by ID
  * @param {string} userID User ID
- * @returns {Promise<(Object|Boolean)>} Resolve in object of user if not found - false
+ * @returns {Promise<(User|null)>} Resolve in object of user if not found - false
  */
 export const findUser = async (userID: UserID): Promise<IUser | null> =>
   usersRepo.getById(userID);
 /**
  * Delete user by ID
- * @param {string} taskId User ID
+ * @param {string} userID User ID
  * @returns {Promise<Boolean>} Resolve true if not found - false
  */
-export const deleteUser = async (userID: UserID): Promise<boolean> => usersRepo.deleteUser(userID);
+export const deleteUser = async (userID: UserID): Promise<boolean> =>
+  usersRepo.deleteUser(userID);
 
 /**
  * Find user by id and update
@@ -44,7 +45,7 @@ export const deleteUser = async (userID: UserID): Promise<boolean> => usersRepo.
  * @param {string} userData.name  User name
  * @param {string} userData.login User login
  * @param {string} userData.password User password
- * @returns {Promise<(Object|Boolean)>} Resolve updated user if not found - false
+ * @returns {Promise<(User|null)>} Resolve updated user if not found - false
  */
 export const updateUser = async (
   userID: UserID,
