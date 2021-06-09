@@ -2,9 +2,9 @@
  * @module inMemoryDb
  * @description This function return methods for work with data base.
  */
-// import { IUser } from '../resources/users/user.types';
-// import { ITask } from '../resources/tasks/task.types';
-// import { IBoard } from '../resources/boards/board.types';
+import { IUser } from '../resources/users/user.types';
+import { ITask } from '../resources/tasks/task.types';
+import { IBoard } from '../resources/boards/board.types';
 import * as dbTypes from './db.types';
 
 export default (() => {
@@ -13,14 +13,14 @@ export default (() => {
     TASKS: [],
     USERS: [],
   };
-  const dbErrorHandler = (tableName: string): string =>
+  const dbErrorHandler = (tableName: string | undefined | number): string =>
     `DB_ERROR table ${tableName} not exist`;
 
   const findIndex = ({ tableName, filter }: dbTypes.IFindIndex): number => {
     const dbTable = tables[tableName];
     let rowIndex = -1;
     if (dbTable) {
-      rowIndex = dbTable.findIndex((item: Record<string, unknown>) => {
+      rowIndex = dbTable.findIndex((item: dbTypes.TableRow) => {
         let filterResult = false;
         Object.keys(filter).forEach((keyName) => {
           if (item[keyName] === filter[keyName]) {
@@ -42,12 +42,18 @@ export default (() => {
      * @param {Object} param.data Data for add to the table
      * @returns {Promise<Object>} Resolve last added row in table
      */
-    addRow: async ({ tableName, data }: dbTypes.IAddRow): Promise<any> => {
+    addRow: async ({
+      tableName,
+      data,
+    }: dbTypes.IAddRow): Promise<dbTypes.DBResponse> => {
       // eslint-disable-next-line dot-notation
       const dbTable = tables[tableName];
-      if (dbTable) {
+      if (dbTable !== undefined) {
         dbTable.push(data);
-        return data;
+        const lastRow = dbTable[dbTable.length - 1];
+        if (lastRow) {
+          return lastRow;
+        }
       }
       throw new Error(dbErrorHandler(tableName));
     },
@@ -58,7 +64,9 @@ export default (() => {
      * @param {String} param.tableName Table name
      * @returns {Promise<Object>} Resolve array with table data
      */
-    getAllRows: async ({ tableName }: dbTypes.IGetAllRows): Promise<any[]> => {
+    getAllRows: async ({
+      tableName,
+    }: dbTypes.IGetAllRows): Promise<(IUser | ITask | IBoard)[]> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         return dbTable;
@@ -78,7 +86,7 @@ export default (() => {
       tableName,
       filter,
       newProps,
-    }: dbTypes.IUpdateRow): Promise<any | null> => {
+    }: dbTypes.IUpdateRow): Promise<dbTypes.DBResponse | null> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });
@@ -113,31 +121,31 @@ export default (() => {
       tableName,
       filter,
       newProps,
-    }: dbTypes.IUpdateManyRows): Promise<number> => {
+    }: dbTypes.IUpdateRow): Promise<number> => {
       let calcUpdatedRows = 0;
       const dbTable = tables[tableName];
       if (dbTable) {
-        const updatedArray: dbTypes.TableRow[] = dbTable.map(
-          (tableRow: dbTypes.TableRow) => {
-            const updatedRow = tableRow;
-            let shouldUpdate = false;
-            Object.keys(filter).forEach((keyName) => {
-              if (updatedRow[keyName] === filter[keyName]) {
-                shouldUpdate = true;
-              }
-            });
-            if (shouldUpdate) {
-              Object.keys(newProps).forEach((key) => {
-                if (Object.prototype.hasOwnProperty.call(tableRow, key)) {
-                  const newValue = newProps[key];
+        const updatedArray = dbTable.map((tableRow: dbTypes.TableRow) => {
+          const updatedRow = tableRow;
+          let shouldUpdate = false;
+          Object.keys(filter).forEach((keyName) => {
+            if (updatedRow[keyName] === filter[keyName]) {
+              shouldUpdate = true;
+            }
+          });
+          if (shouldUpdate) {
+            Object.keys(newProps).forEach((key) => {
+              if (Object.prototype.hasOwnProperty.call(tableRow, key)) {
+                const newValue = newProps[key];
+                if (newValue !== undefined) {
                   updatedRow[key] = newValue;
                 }
-              });
-              calcUpdatedRows += 1;
-            }
-            return updatedRow;
+              }
+            });
+            calcUpdatedRows += 1;
           }
-        );
+          return updatedRow;
+        });
         tables[tableName] = updatedArray;
         return calcUpdatedRows;
       }
@@ -151,7 +159,10 @@ export default (() => {
      * @param {Object} param.filter Parameters for row search
      * @returns  Resolve found row or if not found - false
      */
-    find: async ({ tableName, filter }: dbTypes.IFind): Promise<any> => {
+    find: async ({
+      tableName,
+      filter,
+    }: dbTypes.IFind): Promise<dbTypes.DBResponse | null> => {
       const dbTable = tables[tableName];
       if (dbTable) {
         const rowIndex = findIndex({ tableName, filter });
@@ -201,7 +212,7 @@ export default (() => {
       const dbTable = tables[tableName];
       let calcDeleted = 0;
       if (Array.isArray(dbTable)) {
-        const newArray = dbTable.filter((row: dbTypes.IFilter) => {
+        const newArray = dbTable.filter((row: dbTypes.TableRow) => {
           let shouldDelete = false;
           Object.keys(filter).forEach((keyName) => {
             if (row[keyName] === filter[keyName]) {

@@ -12,7 +12,7 @@ class Board implements IBoard {
 
   columns: IColumn[];
 
-  [x: string]: unknown;
+  [x: string]: string | IColumn[];
 
   /**
    * Create a board.

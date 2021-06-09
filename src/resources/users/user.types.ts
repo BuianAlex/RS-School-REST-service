@@ -1,4 +1,4 @@
-type IBaseUser = Record<string, unknown>;
+type IBaseUser = Record<string, string>;
 export interface IUser extends IBaseUser {
   id: string;
   name: string;

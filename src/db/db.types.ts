@@ -1,9 +1,18 @@
-export type TableRow = Record<string, unknown>;
+import { IUser } from '../resources/users/user.types';
+import { ITask } from '../resources/tasks/task.types';
+import { IBoard } from '../resources/boards/board.types';
+
+export type TableRow = IUser | ITask | IBoard;
+
+export type DBResponse = IUser | ITask | IBoard;
 export interface ITables {
-  [key: string]: Record<string, unknown>[];
+  [key: string]: (IUser | ITask | IBoard)[];
+  BOARDS: IBoard[];
+  TASKS: ITask[];
+  USERS: IUser[];
 }
 export interface IFilter {
-  [key: string]: unknown;
+  [key: string]: string | number;
 }
 
 export interface IFindIndex {
@@ -12,7 +21,7 @@ export interface IFindIndex {
 }
 export interface IAddRow {
   tableName: string;
-  data: Record<string, unknown>;
+  data: IUser | ITask | IBoard;
 }
 export interface IGetAllRows {
   tableName: string;
@@ -20,16 +29,16 @@ export interface IGetAllRows {
 export interface IUpdateRow {
   tableName: string;
   filter: IFilter;
-  newProps: Record<string, unknown>;
+  newProps: Partial<IUser> | Partial<ITask> | Partial<IBoard>;
 }
 
 export interface IUpdateManyRows {
   tableName: string;
   filter: IFilter;
-  newProps: Record<string, unknown>;
+  newProps: Partial<IUser> | Partial<ITask> | Partial<IBoard>;
 }
 
 export interface IFind {
   tableName: string;
-  filter: IFilter;
+  filter: { [key: string]: string | number };
 }

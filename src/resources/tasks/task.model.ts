@@ -28,7 +28,7 @@ class Task implements ITask {
 
   columnId: string;
 
-  [x: string]: unknown;
+  [x: string]: string | number | null;
 
   constructor({
     id = uuidv4(),

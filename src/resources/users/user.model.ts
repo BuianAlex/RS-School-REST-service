@@ -13,7 +13,7 @@ class User implements IUser {
 
   password: string;
 
-  [x: string]: unknown;
+  [x: string]: string;
   /**
    * @param {Object} object  User data
    * @param {string} object.id  User id automatically generated
