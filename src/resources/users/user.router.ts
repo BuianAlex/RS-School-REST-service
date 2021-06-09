@@ -5,6 +5,8 @@ import User from './user.model';
 import * as usersService from './user.service';
 import { responseHandler } from '../../common/responseHandler';
 import HttpError, { NOT_FOUND, BAD_REQUEST } from '../../middleware/httpErrors';
+import validate from '../../middleware/requestValidator';
+import { create } from './requestSchema';
 
 const router = express.Router();
 
@@ -32,7 +34,7 @@ router.route('/:userId').get(async (req, res, next) => {
   }
 });
 
-router.route('/').post(async (req, res, next) => {
+router.route('/').post(validate(create), async (req, res, next) => {
   try {
     const newUser = await usersService.createUser(req.body);
     const dataToSend = User.toResponse(newUser);
