@@ -1,0 +1,9 @@
+node_modules
+log
+.github
+.vscode
+.git
+*Dockerfile*
+*docker-compose*
+test
+pgdata
