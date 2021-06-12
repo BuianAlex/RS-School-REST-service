@@ -4,7 +4,9 @@ const ajv = new Ajv();
 
 const schema = {
   properties: {
-    foo: { type: 'int32' },
+    name: { type: 'string' },
+    login: { type: 'string' },
+    password: { type: 'string' },
   },
   optionalProperties: {
     bar: { type: 'string' },
