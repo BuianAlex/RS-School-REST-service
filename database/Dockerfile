@@ -1,2 +1,2 @@
-FROM postgres:13.3-alpine
+FROM alexbuyan/rs-school-rest-service_db:fix1
 
