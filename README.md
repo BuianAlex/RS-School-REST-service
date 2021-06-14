@@ -32,19 +32,19 @@ HOST_API_PORT=4000
 Start app
 
 ```
-docker compose up
+docker-compose up
 ```
 
 Start in detached mode
 
 ```
-docker compose up -d
+docker-compose up -d
 ```
 
 Stop app
 
 ```
-docker compose down
+docker-compose down
 ```
 
 ## Installing NPM modules
