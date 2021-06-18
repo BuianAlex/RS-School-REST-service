@@ -1,7 +1,6 @@
 import { getRepository, DeleteResult } from 'typeorm';
 
 import { User } from '../../entities/user.entity';
-import { updateManyTasks } from '../tasks/task.repository';
 
 export const getAllUsers = async (): Promise<User[]> => {
   const usersRepository = getRepository(User);
@@ -22,7 +21,6 @@ export const getById = async (userID: string): Promise<User | undefined> => {
 export const deleteUser = async (userID: string): Promise<DeleteResult> => {
   const usersRepository = getRepository(User);
   const userDeleteResult = await usersRepository.delete(userID);
-  await updateManyTasks({ userId: userID }, { userId: null });
   return userDeleteResult;
 };
 

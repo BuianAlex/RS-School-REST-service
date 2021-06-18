@@ -55,7 +55,7 @@ export default (): IAppLogger => {
       const timeNow = moment().format();
       const { message, stack } = error;
       const logRow = JSON.stringify({ time: timeNow, message, stack });
-      console.log(error);
+      process.stderr.write(error + os.EOL);
 
       appErrorLogStream.write(logRow + os.EOL, () => {
         if (exitOnError) {

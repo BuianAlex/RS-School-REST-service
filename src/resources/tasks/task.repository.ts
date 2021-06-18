@@ -34,7 +34,7 @@ export const updateTask = async (
       ...taskForUpdate,
       ...newProps,
     });
-    console.log(taskForUpdate.boardId);
+    console.log(taskForUpdate);
     return updateResult;
   }
   return undefined;

@@ -39,8 +39,8 @@ export const updateBoard = async (
   newProps: Partial<Board>
 ): Promise<Board | undefined> => {
   const { columns, ...restProp } = newProps;
-  console.log(columns, restProp);
 
+  // TODO
   const boardRepository = getRepository(Board);
   const boardForUpdate = await boardRepository.findOne(boardID, {
     relations: ['columns'],

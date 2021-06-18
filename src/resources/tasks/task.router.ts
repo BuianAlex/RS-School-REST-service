@@ -34,8 +34,6 @@ router.route('/:boardId/tasks').post(async (req, res, next) => {
   taskData.boardId = boardId;
   try {
     const newTask = await taskService.createTask(taskData);
-    console.log('dfdf');
-
     return responseHandler(res).created(newTask);
   } catch (error) {
     return next(error);

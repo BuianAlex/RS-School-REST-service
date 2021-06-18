@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 // eslint-disable-next-line import/no-cycle
 import { Board } from './board.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Task {
@@ -11,7 +18,11 @@ export class Task {
   title!: string;
 
   @ManyToOne(() => Board, (board) => board.id, { onDelete: 'CASCADE' })
-  boardId!: Board;
+  @JoinColumn({ name: 'boardId' })
+  board!: Board;
+
+  @Column({ type: 'text', nullable: true })
+  boardId!: string;
 
   @Column()
   order!: number;
@@ -19,11 +30,12 @@ export class Task {
   @Column()
   description!: string;
 
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
-  userId!: string | null;
+  @ManyToOne(() => User, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+
+  @Column({ type: 'text', nullable: true })
+  userId!: Board;
 
   @Column({ type: 'text', nullable: true })
   columnId!: string;

@@ -20,7 +20,6 @@ router.route('/').get(async (_req, res, next) => {
 
 router.route('/:userID').get(async (req, res, next) => {
   const { userID } = req.params;
-
   try {
     const user = await usersService.findUser(userID);
     if (user) {
