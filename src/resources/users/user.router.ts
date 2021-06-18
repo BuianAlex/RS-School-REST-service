@@ -1,7 +1,7 @@
 /* eslint-disable dot-notation */
 import express from 'express';
 
-import User from './user.model';
+import { User } from '../../entities/user.entity';
 import * as usersService from './user.service';
 import { responseHandler } from '../../common/responseHandler';
 import HttpError, { NOT_FOUND, BAD_REQUEST } from '../../middleware/httpErrors';
@@ -18,10 +18,11 @@ router.route('/').get(async (_req, res, next) => {
   }
 });
 
-router.route('/:userId').get(async (req, res, next) => {
-  const { userId } = req.params;
+router.route('/:userID').get(async (req, res, next) => {
+  const { userID } = req.params;
+
   try {
-    const user = await usersService.findUser(userId);
+    const user = await usersService.findUser(userID);
     if (user) {
       const dataToSend = User.toResponse(user);
       return responseHandler(res).successful(dataToSend);
@@ -42,11 +43,12 @@ router.route('/').post(async (req, res, next) => {
   }
 });
 
-router.route('/:userId').delete(async (req, res, next) => {
-  const { userId } = req.params;
+router.route('/:userID').delete(async (req, res, next) => {
+  const { userID } = req.params;
   try {
-    const isSuccessful = await usersService.deleteUser(userId);
-    if (typeof isSuccessful === 'boolean' && isSuccessful) {
+    const deleteResult = await usersService.deleteUser(userID);
+    const { affected } = deleteResult;
+    if (affected === 1) {
       return responseHandler(res).deleted();
     }
     throw new HttpError(NOT_FOUND);
@@ -55,10 +57,10 @@ router.route('/:userId').delete(async (req, res, next) => {
   }
 });
 
-router.route('/:userId').put(async (req, res, next) => {
-  const { userId } = req.params;
+router.route('/:userID').put(async (req, res, next) => {
+  const { userID } = req.params;
   try {
-    const userUpdated = await usersService.updateUser(userId, req.body);
+    const userUpdated = await usersService.updateUser(userID, req.body);
     if (userUpdated) {
       const dataToSend = User.toResponse(userUpdated);
       return responseHandler(res).updated(dataToSend);

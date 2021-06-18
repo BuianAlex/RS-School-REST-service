@@ -1,15 +1,16 @@
+import { DeleteResult } from 'typeorm';
 /**
  * @module userService
  */
-import * as usersRepo from './user.memory.repository';
-import User from './user.model';
-import { IUser, UserID } from './user.types';
+import * as usersRepo from './user.repository';
+import { User } from '../../entities/user.entity';
+
 /**
  * Get all users from the db
  * @async
  * @returns {Promise<User[]>} Resolve in array of user objects
  */
-export const getAll = async (): Promise<IUser[]> => usersRepo.getAllUsers();
+export const getAll = async (): Promise<User[]> => usersRepo.getAllUsers();
 /**
  * Create new user and add to the db
  * @async
@@ -19,23 +20,22 @@ export const getAll = async (): Promise<IUser[]> => usersRepo.getAllUsers();
  * @param {string} userData.password User password
  * @returns {Promise<User>} Resolve in object of new user
  */
-export const createUser = async (userData: IUser): Promise<IUser> => {
-  const newUser = new User(userData);
-  return usersRepo.addUser(newUser);
-};
+export const createUser = async (userData: User): Promise<User> =>
+  usersRepo.addUser(userData);
+
 /**
  * Find user by ID
  * @param {string} userID User ID
  * @returns {Promise<(User|null)>} Resolve in object of user if not found - false
  */
-export const findUser = async (userID: UserID): Promise<IUser | null> =>
+export const findUser = async (userID: string): Promise<User | undefined> =>
   usersRepo.getById(userID);
 /**
  * Delete user by ID
  * @param {string} userID User ID
  * @returns {Promise<Boolean>} Resolve true if not found - false
  */
-export const deleteUser = async (userID: UserID): Promise<boolean> =>
+export const deleteUser = async (userID: string): Promise<DeleteResult> =>
   usersRepo.deleteUser(userID);
 
 /**
@@ -48,6 +48,6 @@ export const deleteUser = async (userID: UserID): Promise<boolean> =>
  * @returns {Promise<(User|null)>} Resolve updated user if not found - false
  */
 export const updateUser = async (
-  userID: UserID,
-  newProps: IUser
-): Promise<IUser | null> => usersRepo.updateUser(userID, newProps);
+  userID: string,
+  newProps: Partial<User>
+): Promise<User | undefined> => usersRepo.updateUser(userID, newProps);

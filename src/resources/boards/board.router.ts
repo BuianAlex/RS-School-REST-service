@@ -40,8 +40,9 @@ router.route('/').post(async (req, res, next) => {
 router.route('/:boardId').delete(async (req, res, next) => {
   const { boardId } = req.params;
   try {
-    const isSuccessful = await boardsService.deleteBoard(boardId);
-    if (isSuccessful) {
+    const deleteResult = await boardsService.deleteBoard(boardId);
+    const { affected } = deleteResult;
+    if (affected === 1) {
       return responseHandler(res).deleted();
     }
     throw new HttpError(NOT_FOUND);

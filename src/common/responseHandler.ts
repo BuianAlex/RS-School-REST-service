@@ -1,15 +1,15 @@
 import express from 'express';
 import HttpError from '../middleware/httpErrors';
-import { IUser } from '../resources/users/user.types';
+import { User } from '../entities/user.entity';
 import { ITask } from '../resources/tasks/task.types';
 import { IBoard } from '../resources/boards/board.types';
 
 type dataType =
-  | Partial<IUser>
-  | IUser
+  | Partial<User>
+  | User
   | ITask
   | IBoard
-  | (Partial<IUser> | ITask | IBoard)[];
+  | (Partial<User> | ITask | IBoard)[];
 
 interface IHandler {
   successful: (data: dataType) => void;

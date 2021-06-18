@@ -1,15 +1,16 @@
+import { DeleteResult } from 'typeorm';
 /**
  * @module boardService
  */
-import * as boardsRepo from './board.memory.repository';
-import Board from './board.model';
-import { IBoard } from './board.types';
+import * as boardsRepo from './board.repository';
+import { Board } from '../../entities/board.entity';
+
 /**
  * Get all boards from the db
  * @async
  * @returns {Promise<Board[]>} Resolve in array of boards objects
  */
-export const getAllBoards = async (): Promise<IBoard[]> =>
+export const getAllBoards = async (): Promise<Board[]> =>
   boardsRepo.getAllBoards();
 /**
  * Create a new board and add to the db
@@ -19,17 +20,16 @@ export const getAllBoards = async (): Promise<IBoard[]> =>
  * @param {Array} boardData.columns Array of columns
  * @returns {Promise<Board>} new board object
  */
-export const createBoard = (boardData: IBoard): Promise<IBoard> => {
-  const newBoard = new Board(boardData);
-  return boardsRepo.addBoard(newBoard);
-};
+export const createBoard = (boardData: Board): Promise<Board> =>
+  boardsRepo.addBoard(boardData);
+
 /**
  * Find a board by ID
  * @async
  * @param {String} boardID  Board ID
  * @returns {Promise<(Board|Boolean)>} Resolve board object if board not found - false
  */
-export const findBoard = (boardID: string): Promise<IBoard | null> =>
+export const findBoard = (boardID: string): Promise<Board | undefined> =>
   boardsRepo.findBoard(boardID);
 /**
  * Delete board by id
@@ -37,7 +37,7 @@ export const findBoard = (boardID: string): Promise<IBoard | null> =>
  * @param {String} boardID  Board ID
  * @returns {Promise<Boolean>} Resolve true if board not found - false
  */
-export const deleteBoard = async (boardID: string): Promise<boolean> =>
+export const deleteBoard = async (boardID: string): Promise<DeleteResult> =>
   boardsRepo.deleteBoard(boardID);
 /**
  * Find board by id and update
@@ -50,5 +50,5 @@ export const deleteBoard = async (boardID: string): Promise<boolean> =>
  */
 export const updateBoard = async (
   boardID: string,
-  newProps: Partial<IBoard>
-): Promise<IBoard | null> => boardsRepo.updateBoard(boardID, newProps);
+  newProps: Partial<Board>
+): Promise<Board | undefined> => boardsRepo.updateBoard(boardID, newProps);

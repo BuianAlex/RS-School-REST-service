@@ -1,15 +1,16 @@
+import { DeleteResult } from 'typeorm';
 /**
  * @module taskService
  */
-import * as tasksRepo from './task.memory.repository';
-import Task from './task.model';
-import { ITask } from './task.types';
+import * as tasksRepo from './task.repository';
+import { Task } from '../../entities/task.entity';
+
 /**
  * Get all tasks from the db
  * @async
  * @returns {Promise<Task[]>} Resolve in array of tasks objects
  */
-export const getAllTasks = (): Promise<ITask[]> => tasksRepo.getAllTasks();
+export const getAllTasks = (): Promise<Task[]> => tasksRepo.getAllTasks();
 /**
  * Create new task and add it to the db
  * @async
@@ -22,23 +23,22 @@ export const getAllTasks = (): Promise<ITask[]> => tasksRepo.getAllTasks();
  * @param {string} taskData.columnId Column ID with belong task
  * @returns {Promise<Task>} Resolve in object of new task
  */
-export const createTask = (taskData: ITask): Promise<ITask> => {
-  const newTask = new Task(taskData);
-  return tasksRepo.addTask(newTask);
-};
+export const createTask = (taskData: Task): Promise<Task> =>
+  tasksRepo.addTask(taskData);
+
 /**
  * Find task by ID
  * @param {string} taskID Task ID
  * @returns {Promise<(Task|null)>} Resolve in object of task if not found - false
  */
-export const findTask = (taskID: string): Promise<ITask | null> =>
+export const findTask = (taskID: string): Promise<Task | undefined> =>
   tasksRepo.findTask(taskID);
-/**
- * Delete task by ID
- * @param {string} taskID Task ID
- * @returns {Promise<Boolean>} Resolve true if not found - false
- */
-export const deleteTask = (taskID: string): Promise<boolean> =>
+// /**
+//  * Delete task by ID
+//  * @param {string} taskID Task ID
+//  * @returns {Promise<Boolean>} Resolve true if not found - false
+//  */
+export const deleteTask = (taskID: string): Promise<DeleteResult> =>
   tasksRepo.deleteTask(taskID);
 /**
  * Find task by id and update
@@ -53,5 +53,5 @@ export const deleteTask = (taskID: string): Promise<boolean> =>
  */
 export const updateTask = (
   taskID: string,
-  newProps: ITask
-): Promise<ITask | null> => tasksRepo.updateTask(taskID, newProps);
+  newProps: Partial<Task>
+): Promise<Task | undefined> => tasksRepo.updateTask(taskID, newProps);

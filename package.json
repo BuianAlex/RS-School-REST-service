@@ -55,9 +55,9 @@
     "morgan": "^1.10.0",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.6.2",
-    "sequelize-typescript": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "4.1.6",
+    "typeorm": "^0.2.34",
     "uuid": "8.3.2",
     "yamljs": "0.3.0"
   },

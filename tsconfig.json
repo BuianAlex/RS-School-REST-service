@@ -15,8 +15,8 @@
     "noPropertyAccessFromIndexSignature": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },

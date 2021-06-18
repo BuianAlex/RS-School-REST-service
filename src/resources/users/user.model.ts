@@ -1,11 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
+
 import { IUser } from './user.types';
+import { UserEntity } from './user.entity';
+
+entites
 /**
  * Class to create a user object
  * @class
  */
-class User implements IUser {
-  id: string;
+
+class User  {
+  uuid: string;
 
   name: string;
 
@@ -23,12 +28,13 @@ class User implements IUser {
    */
 
   constructor({
-    id = uuidv4(),
+    uuid = uuidv4(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
   }: IUser) {
-    this.id = id;
+    super();
+    this.uuid = uuid;
     this.name = name;
     this.login = login;
     this.password = password;

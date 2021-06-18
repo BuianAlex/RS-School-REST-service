@@ -34,6 +34,8 @@ router.route('/:boardId/tasks').post(async (req, res, next) => {
   taskData.boardId = boardId;
   try {
     const newTask = await taskService.createTask(taskData);
+    console.log('dfdf');
+
     return responseHandler(res).created(newTask);
   } catch (error) {
     return next(error);
@@ -54,9 +56,11 @@ router.route('/:boardId/tasks/:taskId').delete(async (req, res, next) => {
 });
 
 router.route('/:boardId/tasks/:taskId').put(async (req, res, next) => {
-  const { taskId } = req.params;
+  const { taskId, boardId } = req.params;
+  const newProps = req.body;
+  newProps.boardId = boardId;
   try {
-    const taskUpdated = await taskService.updateTask(taskId, req.body);
+    const taskUpdated = await taskService.updateTask(taskId, newProps);
     if (taskUpdated) {
       return responseHandler(res).updated(taskUpdated);
     }
