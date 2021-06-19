@@ -22,7 +22,8 @@
   },
   "exclude": [
     "node_modules/",
-    "test"
+    "test",
+    "src/migration"
   ],
   "include": [
     "./src/**/*.ts"
