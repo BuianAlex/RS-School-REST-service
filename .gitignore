@@ -3,5 +3,6 @@ log
 *.log
 docs
 build
-pgdata
+pg-db
 .env
+src/migration

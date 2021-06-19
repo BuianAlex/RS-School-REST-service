@@ -1,5 +1,5 @@
 import { getRepository, DeleteResult, UpdateResult } from 'typeorm';
-//
+
 import { Task } from '../../entities/task.entity';
 
 export const getAllTasks = async (): Promise<Task[]> => {
@@ -34,7 +34,6 @@ export const updateTask = async (
       ...taskForUpdate,
       ...newProps,
     });
-    console.log(taskForUpdate);
     return updateResult;
   }
   return undefined;

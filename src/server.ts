@@ -13,5 +13,5 @@ connection
     );
   })
   .catch((error) => {
-    console.log(error);
+    process.stderr.write(error + os.EOL);
   });
