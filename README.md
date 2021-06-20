@@ -11,6 +11,44 @@
 git clone {repository URL}
 ```
 
+## For docker
+
+Create .env
+
+#### Environment variables for test
+
+```
+PORT=4000
+DB_HOST_NAME=postgres-db
+DB_PORT=5433
+DB=test-db
+DB_USER=dbUser
+DB_PASSWORD=test
+HOST_LOG_PATH=./log
+HOST_PERSISTS_PGDATA=./pg-db
+HOST_API_PORT=4000
+```
+
+Start app
+
+```
+docker-compose up -d
+```
+
+How to create the database tables
+
+```
+docker container exec -it node-api /bin/sh
+# npm run dbInit
+# rm src/migration/*-initMigrate.ts
+```
+
+Stop app
+
+```
+docker-compose down
+```
+
 ## Installing NPM modules
 
 ```
