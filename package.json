@@ -19,7 +19,8 @@
     "migration:create": "npm run typeorm migration:create -- -n",
     "migration:generate": "npm run typeorm migration:generate -- -n",
     "migration:run": "npm run typeorm migration:run",
-    "migration:revert":  "npm run typeorm migration:revert"
+    "migration:revert":  "npm run typeorm migration:revert",
+    "dbInit": "npm run migration:generate -- initMigrate && npm run  migration:run"
   },
   "keywords": [
     "rs",

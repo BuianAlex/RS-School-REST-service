@@ -24,10 +24,10 @@ export class Task {
   @Column({ type: 'text', nullable: true })
   boardId!: string;
 
-  @Column()
+  @Column('int')
   order!: number;
 
-  @Column()
+  @Column('text')
   description!: string;
 
   @ManyToOne(() => User, { onDelete: 'SET NULL' })

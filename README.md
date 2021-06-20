@@ -32,13 +32,15 @@ HOST_API_PORT=4000
 Start app
 
 ```
-docker-compose up
-```
-
-Start in detached mode
-
-```
 docker-compose up -d
+```
+
+How to create the database tables
+
+```
+docker container exec -it node-api /bin/sh
+# npm run dbInit
+# rm src/migration/*-initMigrate.ts
 ```
 
 Stop app

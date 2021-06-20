@@ -7,13 +7,13 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column('text')
   name!: string;
 
-  @Column()
+  @Column('text')
   login!: string;
 
-  @Column()
+  @Column('text')
   password!: string;
 
   static toResponse(user: User): Partial<User> {

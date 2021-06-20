@@ -7,10 +7,10 @@ export class ColumnEnt {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column('int')
   order!: number;
 
-  @Column()
+  @Column('text')
   title!: string;
 
   @ManyToOne(() => Board, (board) => board.columns, { onDelete: 'CASCADE' })
