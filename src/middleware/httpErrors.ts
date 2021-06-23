@@ -23,6 +23,11 @@ export const UNAUTHORIZED = {
   code: 401,
 };
 
+export const FORBIDDEN = {
+  msg: 'Forbidden',
+  code: 403,
+};
+
 export const SERVER_ERROR = {
   msg: 'InternalServerError',
   code: 500,

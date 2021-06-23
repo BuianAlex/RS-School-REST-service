@@ -145,10 +145,7 @@ describe('Tasks suite', () => {
         .set('Accept', 'application/json')
         .expect(200)
         .expect('Content-Type', /json/)
-        .then((res) => {
-          console.log(res.body, updatedTask);
-          jestExpect(res.body).toMatchObject(updatedTask);
-        });
+        .then((res) => jestExpect(res.body).toMatchObject(updatedTask));
     });
   });
 

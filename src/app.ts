@@ -4,12 +4,14 @@ import express from 'express';
 import swaggerUI from 'swagger-ui-express';
 import YAML from 'yamljs';
 
+import { loginUser } from './resources/login/login.service';
 import userRouter from './resources/users/user.router';
 import boardRouter from './resources/boards/board.router';
 import taskRouter from './resources/tasks/task.router';
 import { responseHandler } from './common/responseHandler';
 import HttpError, { NOT_FOUND } from './middleware/httpErrors';
 import AppLogger from './middleware/appLogger';
+import { validator } from './middleware/permissionValidator';
 
 const logger = AppLogger();
 
@@ -30,6 +32,8 @@ app.use('/', (req, res, next) => {
   next();
 });
 
+app.use('/login', loginUser);
+app.use(validator);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);

@@ -9,7 +9,8 @@ type dataType =
   | User
   | ITask
   | IBoard
-  | (Partial<User> | ITask | IBoard)[];
+  | (Partial<User> | ITask | IBoard)[]
+  | Record<string, string>;
 
 interface IHandler {
   successful: (data: dataType) => void;

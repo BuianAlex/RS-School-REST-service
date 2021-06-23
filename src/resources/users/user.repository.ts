@@ -18,6 +18,13 @@ export const getById = async (userID: string): Promise<User | undefined> => {
   return usersRepository.findOne(userID);
 };
 
+export const getByLogin = async (
+  userLogin: string
+): Promise<User | undefined> => {
+  const usersRepository = getRepository(User);
+  return usersRepository.findOne({ login: userLogin });
+};
+
 export const deleteUser = async (userID: string): Promise<DeleteResult> => {
   const usersRepository = getRepository(User);
   const userDeleteResult = await usersRepository.delete(userID);
