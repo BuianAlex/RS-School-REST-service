@@ -1,5 +1,4 @@
 import { DeleteResult } from 'typeorm';
-// import bcrypt from 'bcryptjs';
 /**
  * @module userService
  */
@@ -23,11 +22,6 @@ export const getAll = async (): Promise<User[]> => usersRepo.getAllUsers();
  */
 // eslint-disable-next-line arrow-body-style
 export const createUser = async (userData: User): Promise<User> => {
-  // const { password, ...restData } = userData;
-  // const passwordHash = bcrypt.hashSync(password, 10);
-  // const passwordObject = { password: passwordHash };
-  // const updateUserData = { ...passwordObject, ...restData };
-  // return usersRepo.addUser(updateUserData);
   return usersRepo.addUser(userData);
 };
 /**
