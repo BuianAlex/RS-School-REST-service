@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
 
+import config from '../common/config';
 import HttpError, { UNAUTHORIZED } from './httpErrors';
 
 export const validator = (
@@ -14,7 +15,7 @@ export const validator = (
     const [type, token] = headerString.split(' ');
     if (type !== 'Bearer' || !token) throw new HttpError(UNAUTHORIZED);
     try {
-      jwt.verify(token, 'lets_play_sum_games_man');
+      jwt.verify(token, config.JWT_SECRET_KEY);
     } catch (error) {
       next(new HttpError(UNAUTHORIZED));
     }
