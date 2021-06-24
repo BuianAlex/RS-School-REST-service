@@ -23,7 +23,7 @@ const config: PostgresConnectionOptions = {
   password: DB_PASSWORD,
   database: DB,
   entities: [`${path.join(__dirname, '..')}/entities/**/*.ts`],
-  // entities: [`srs/entities/*.ts`],
+  subscribers: [`src/subscriber/*.ts`],
   synchronize: false,
   migrations: [`src/migration/*.ts`],
   cli: {
