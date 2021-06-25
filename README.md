@@ -11,9 +11,9 @@
 git clone {repository URL}
 ```
 
-## For docker
+## How to use with docker
 
-Create .env
+Create .env file
 
 #### Environment variables for test
 
@@ -35,12 +35,18 @@ Start app
 docker-compose up -d
 ```
 
-How to create the database tables
+How to create database tables and user for the tests with login: admin password: admin
 
 ```
 docker container exec -it node-api /bin/sh
-# npm run dbInit
-# rm src/migration/*-initMigrate.ts
+# npm run migration:run
+```
+
+How to clean up the database
+
+```
+docker container exec -it node-api /bin/sh
+# npm run migration:revert
 ```
 
 Stop app
