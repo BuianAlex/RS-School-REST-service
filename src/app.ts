@@ -11,7 +11,9 @@ import taskRouter from './resources/tasks/task.router';
 import { responseHandler } from './common/responseHandler';
 import HttpError, { NOT_FOUND } from './middleware/httpErrors';
 import AppLogger from './middleware/appLogger';
-import { validator } from './middleware/permissionValidator';
+import { permissionValidator } from './middleware/permissionValidator';
+import { jsonValidator } from './middleware/jsonValidator';
+import * as loginJsonSchema from './resources/login/jsonSchema';
 
 const logger = AppLogger();
 
@@ -32,8 +34,8 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/login', loginUser);
-app.use(validator);
+app.use('/login', jsonValidator(loginJsonSchema.validate), loginUser);
+app.use(permissionValidator);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 app.use('/boards', taskRouter);
@@ -49,9 +51,14 @@ app.use(
     res: express.Response,
     _next: express.NextFunction
   ) => {
-    const { statusCode } = err;
+    const { statusCode, message } = err;
+
     if (statusCode) {
-      return responseHandler(res).httpError(err);
+      if (err instanceof HttpError) {
+        return responseHandler(res).httpError(err);
+      }
+      const httpError = new HttpError({ msg: message, code: statusCode });
+      return responseHandler(res).httpError(httpError);
     }
     logger.errorLogger(err);
     return responseHandler(res).internalServerError();
@@ -70,6 +77,5 @@ process
     exceptionError.message = `UncaughtException ${error.message}`;
     logger.errorLogger(exceptionError, true);
   });
-// throw Error('Oops!');
-// Promise.reject(Error('Oops!'));
+
 export default app;
