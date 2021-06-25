@@ -4,7 +4,7 @@ import express from 'express';
 
 import config from '../../common/config';
 import * as usersRepo from '../users/user.repository';
-import HttpError, { FORBIDDEN } from '../../middleware/httpErrors';
+import HttpError, { FORBIDDEN, BAD_REQUEST } from '../../middleware/httpErrors';
 import { responseHandler } from '../../common/responseHandler';
 
 export const loginUser = async (
@@ -14,7 +14,7 @@ export const loginUser = async (
 ): Promise<void> => {
   const { password, login } = req.body;
   try {
-    if (!password || !login) throw new HttpError(FORBIDDEN);
+    if (!password || !login) throw new HttpError(BAD_REQUEST);
     const user = await usersRepo.getByLogin(login);
     if (user) {
       const compareResult = await bcrypt.compare(password, user.password);

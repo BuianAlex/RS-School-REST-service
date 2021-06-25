@@ -1,5 +1,7 @@
 import path from 'path';
 
+import helmet from 'helmet';
+import { checkSchema } from 'express-validator';
 import express from 'express';
 import swaggerUI from 'swagger-ui-express';
 import YAML from 'yamljs';
@@ -12,12 +14,13 @@ import { responseHandler } from './common/responseHandler';
 import HttpError, { NOT_FOUND } from './middleware/httpErrors';
 import AppLogger from './middleware/appLogger';
 import { permissionValidator } from './middleware/permissionValidator';
-import { jsonValidator } from './middleware/jsonValidator';
-import * as loginJsonSchema from './resources/login/jsonSchema';
+import { jsonValidatorCheckResult } from './middleware/jsonValidator';
+import * as loginSchema from './resources/login/jsonSchema';
 
 const logger = AppLogger();
 
 const app = express();
+app.use(helmet());
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
@@ -34,7 +37,12 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/login', jsonValidator(loginJsonSchema.validate), loginUser);
+app.use(
+  '/login',
+  checkSchema(loginSchema.schema),
+  jsonValidatorCheckResult,
+  loginUser
+);
 app.use(permissionValidator);
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
