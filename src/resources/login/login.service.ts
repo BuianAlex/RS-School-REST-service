@@ -21,7 +21,7 @@ export const loginUser = async (
       if (!compareResult) throw new HttpError(FORBIDDEN);
       const token = await new Promise<string | Error>((resolve, reject) => {
         jwt.sign(
-          { id: user.id },
+          { id: user.id, login: user.login },
           config.JWT_SECRET_KEY,
           {
             expiresIn: 60 * 60 * 24,
