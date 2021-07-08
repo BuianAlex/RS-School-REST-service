@@ -7,13 +7,17 @@ import {
   Delete,
   Put,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
+import { NotFoundException, BadRequestException } from '@nestjs/common';
+
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { AuthGuard } from './../auth/auth.guard';
 
 @Controller('boards')
+@UseGuards(AuthGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 

@@ -7,46 +7,52 @@ import {
   Delete,
   ParseUUIDPipe,
   Put,
+  NotFoundException,
+  HttpCode,
+  UseGuards,
 } from '@nestjs/common';
+
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-// import { AuthGuard } from 'src/auth/auth.guard';
-// import { UseGuards } from '@nestjs/common';
-
+import { AuthGuard } from './../auth/auth.guard';
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  //UseGuards(AuthGuard)
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  // @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  // @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+    const findResult = await this.usersService.findOne(id);
+    if (!findResult) throw new NotFoundException();
+    return findResult;
   }
 
-  // @UseGuards(AuthGuard)
   @Put(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() updateUserDto: UpdateUserDto
   ) {
-    return this.usersService.update(id, updateUserDto);
+    const updateResult = this.usersService.update(id, updateUserDto);
+    if (!updateResult) throw new NotFoundException();
+    return updateResult;
   }
 
-  // @UseGuards(AuthGuard)
   @Delete(':id')
-  remove(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.usersService.remove(id);
+  @HttpCode(204)
+  async remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    const deleteResult = await this.usersService.remove(id);
+    if (!deleteResult) throw new NotFoundException();
+    return true;
   }
 }
