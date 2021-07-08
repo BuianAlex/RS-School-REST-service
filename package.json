@@ -6,12 +6,11 @@
     "url": ""
   },
   "description": "REST service starter for RS School",
-  "main": "src/server.js",
   "scripts": {
     "doc": "jsdoc -c jsdoc.json",
-    "start:dev": "nodemon",
-    "build": "tsc",
-    "start": "npm run build && node build/server.js",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
     "lint": "eslint --ext .ts --fix src/",
     "test": "cross-env DEBUG=rs:* jest --testMatch \"<rootDir>/test/e2e/test/*.test.js\" --noStackTrace --runInBand",
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
@@ -19,8 +18,7 @@
     "migration:create": "npm run typeorm migration:create -- -n",
     "migration:generate": "npm run typeorm migration:generate -- -n",
     "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert",
-    "dbInit": "npm run migration:generate -- initMigrate && npm run  migration:run"
+    "migration:revert": "npm run typeorm migration:revert"
   },
   "keywords": [
     "rs",
@@ -52,7 +50,15 @@
     ]
   },
   "dependencies": {
+    "@nestjs/common": "^7.6.18",
+    "@nestjs/core": "^7.6.18",
+    "@nestjs/jwt": "^7.2.0",
+    "@nestjs/platform-express": "^7.6.18",
+    "@nestjs/swagger": "^4.8.2",
+    "@nestjs/typeorm": "^7.1.5",
     "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "cross-env": "7.0.3",
     "dotenv": "9.0.0",
     "express": "4.17.1",
@@ -64,7 +70,8 @@
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
-    "swagger-ui-express": "4.1.6",
+    "rxjs": "^6.6.7",
+    "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.34",
     "uuid": "8.3.2",
     "yamljs": "0.3.0"
@@ -88,6 +95,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-nestjs": "^1.2.3",
     "eslint-plugin-no-loops": "^0.3.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-prettier": "3.4.0",

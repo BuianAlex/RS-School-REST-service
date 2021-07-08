@@ -3,11 +3,12 @@
     "target": "es2020",
     "module": "CommonJS",
     "allowJs": false,
-    "outDir": "./build",
+    "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": "./",
     "downlevelIteration": false,
     "strict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false, //should be true
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -18,14 +19,12 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
   "exclude": [
     "node_modules/",
     "test",
-    "src/migration",
-  ],
-  "include": [
-    "./src/**/*.ts"
-, "src/db/index.js"  ]
+    "dataBase/",
+    "dist"
+  ]
 }

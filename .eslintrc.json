@@ -33,8 +33,9 @@
   "extends": [
     "eslint:recommended",
     "plugin:node/recommended",
-    "airbnb-base",
+    "airbnb-typescript/base",
     "prettier",
+    "plugin:nestjs/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],

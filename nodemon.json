@@ -1,7 +1,0 @@
-{
-  "watch": ["src"],
-  "legacyWatch": true,
-  "ext": ".ts,.js",
-  "ignore": ["node_modules/", "src/migration"],
-  "exec": "ts-node ./src/server.ts"
-}
