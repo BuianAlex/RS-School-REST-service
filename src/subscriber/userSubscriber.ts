@@ -1,10 +1,12 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   EventSubscriber,
   EntitySubscriberInterface,
   InsertEvent,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { User } from './../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {

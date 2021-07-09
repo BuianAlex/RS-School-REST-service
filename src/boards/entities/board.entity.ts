@@ -1,8 +1,9 @@
+/* eslint-disable import/no-cycle */
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { ColumnEnt } from '../../columns/entities/column.entity';
 
-interface IBoardToResponse {
+export interface IBoardToResponse {
   id: string;
   title: string;
   columns: Omit<ColumnEnt, 'boardId'>[];

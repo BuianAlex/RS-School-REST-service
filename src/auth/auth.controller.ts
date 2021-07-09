@@ -1,6 +1,11 @@
-import { ForbiddenException } from '@nestjs/common';
-import { HttpCode } from '@nestjs/common';
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  ForbiddenException,
+  HttpCode,
+  Body,
+  Controller,
+  Post,
+} from '@nestjs/common';
+
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
 
@@ -10,7 +15,7 @@ export class AuthController {
 
   @Post('/login')
   @HttpCode(200)
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(@Body() loginUserDto: LoginUserDto): Promise<{ token: string }> {
     let result;
     try {
       result = await this.authService.login(

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Board } from './entities/board.entity';
+import { Board, IBoardToResponse } from './entities/board.entity';
 import { ColumnEnt } from '../columns/entities/column.entity';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -16,27 +16,28 @@ export class BoardsService {
     private columnRepository: Repository<ColumnEnt>
   ) {}
 
-  async create(createBoardDto: CreateBoardDto) {
+  async create(createBoardDto: CreateBoardDto): Promise<IBoardToResponse> {
     const { columns, ...restParams } = createBoardDto;
     const newBoard = this.boardsRepository.create(restParams);
     const saveBoardResult = await this.boardsRepository.save(newBoard);
     const arrColumns = columns.map((item) => {
-      item.boardId = saveBoardResult;
-      return this.columnRepository.create(item);
+      const { ...board } = item;
+      board.boardId = saveBoardResult;
+      return this.columnRepository.create(board);
     });
     const saveColumnsResult = await this.columnRepository.save(arrColumns);
     saveBoardResult.columns = saveColumnsResult;
     return Board.toResponse(saveBoardResult);
   }
 
-  async findAll() {
+  async findAll(): Promise<IBoardToResponse[]> {
     const findResult = await this.boardsRepository.find({
       relations: ['columns'],
     });
     return findResult.map(Board.toResponse);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<IBoardToResponse | undefined> {
     const findResult = await this.boardsRepository.findOne(id, {
       relations: ['columns'],
     });
@@ -44,7 +45,10 @@ export class BoardsService {
     return Board.toResponse(findResult);
   }
 
-  async update(id: string, updateBoardDto: UpdateBoardDto) {
+  async update(
+    id: string,
+    updateBoardDto: UpdateBoardDto
+  ): Promise<IBoardToResponse | undefined> {
     const { columns, ...restProps } = updateBoardDto;
     const oldBoard = await this.boardsRepository.findOne(id, {
       relations: ['columns'],
@@ -66,11 +70,12 @@ export class BoardsService {
       forDelete: [],
     };
     columns?.forEach((item) => {
-      item.boardId = updateBoardResult;
+      const { ...board } = item;
+      board.boardId = updateBoardResult;
       if (item.id) {
-        filterColumns.forUpdate.push(item);
+        filterColumns.forUpdate.push(board);
       } else {
-        filterColumns.forCreate.push(item);
+        filterColumns.forCreate.push(board);
       }
     });
     oldBoard.columns.forEach((oldListItem) => {
@@ -82,9 +87,9 @@ export class BoardsService {
       }
     });
     if (filterColumns.forCreate.length) {
-      const arrNewColumns = filterColumns.forCreate.map((item) => {
-        return this.columnRepository.create(item);
-      });
+      const arrNewColumns = filterColumns.forCreate.map((item) =>
+        this.columnRepository.create(item)
+      );
       await this.columnRepository.save(arrNewColumns);
     }
     if (filterColumns.forDelete.length) {
@@ -117,7 +122,10 @@ export class BoardsService {
     return Board.toResponse(updatedBoard);
   }
 
-  remove(id: string) {
-    return this.boardsRepository.delete(id);
+  async remove(id: string): Promise<boolean | undefined> {
+    const deleteBoardResult = await this.boardsRepository.delete(id);
+    const { affected } = deleteBoardResult;
+    if (!affected) return undefined;
+    return true;
   }
 }

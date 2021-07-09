@@ -13,24 +13,29 @@ import {
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
-import { AuthGuard } from './../auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { IBoardToResponse } from './entities/board.entity';
 @Controller('boards')
 @UseGuards(AuthGuard)
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
   @Post()
-  async create(@Body() createBoardDto: CreateBoardDto) {
+  async create(
+    @Body() createBoardDto: CreateBoardDto
+  ): Promise<IBoardToResponse> {
     return this.boardsService.create(createBoardDto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<IBoardToResponse[]> {
     return this.boardsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(
+    @Param('id') id: string
+  ): Promise<IBoardToResponse | undefined> {
     const findResult = await this.boardsService.findOne(id);
     if (!findResult) throw new NotFoundException();
     return findResult;
@@ -40,7 +45,7 @@ export class BoardsController {
   async update(
     @Param('id') id: string,
     @Body() updateBoardDto: UpdateBoardDto
-  ) {
+  ): Promise<IBoardToResponse | undefined> {
     const updateResult = await this.boardsService.update(id, updateBoardDto);
     if (!updateResult) throw new NotFoundException();
     return updateResult;
@@ -48,9 +53,9 @@ export class BoardsController {
 
   @Delete(':id')
   @HttpCode(204)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<boolean | undefined> {
     const deleteResult = await this.boardsService.remove(id);
-    if (deleteResult.affected === 0) throw new NotFoundException();
-    return;
+    if (!deleteResult) throw new NotFoundException();
+    return true;
   }
 }

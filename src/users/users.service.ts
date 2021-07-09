@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -13,30 +13,33 @@ export class UsersService {
     private usersRepository: Repository<User>
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<Partial<User>> {
     const newUser = this.usersRepository.create(createUserDto);
     const user = await this.usersRepository.save(newUser);
     return User.toResponse(user);
   }
 
-  async findAll() {
+  async findAll(): Promise<Partial<User>[]> {
     const usersList = await this.usersRepository.find();
     return usersList.map(User.toResponse);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Partial<User> | undefined> {
     const user = await this.usersRepository.findOne(id);
     if (!user) return undefined;
     return User.toResponse(user);
   }
 
-  async findByLogin(login: string) {
+  async findByLogin(login: string): Promise<User | undefined> {
     return this.usersRepository.findOne({ login });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto
+  ): Promise<Partial<User> | undefined> {
     const userForUpdate = await this.usersRepository.findOne(id);
-    if (!userForUpdate) undefined;
+    if (!userForUpdate) return undefined;
     const updateResult = await this.usersRepository.save({
       ...userForUpdate,
       ...updateUserDto,
@@ -44,9 +47,9 @@ export class UsersService {
     return User.toResponse(updateResult);
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<boolean | undefined> {
     const result = await this.usersRepository.delete(id);
-    if (result.affected === 0) undefined;
+    if (result.affected === 0) return undefined;
     return true;
   }
 }

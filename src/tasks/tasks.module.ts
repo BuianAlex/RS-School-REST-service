@@ -5,13 +5,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { Task } from './entities/task.entity';
-import { config } from './../common/config';
+import { config } from "../common/config";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Task]),
     JwtModule.register({
-      secret: config['JWT_SECRET_KEY'],
+      secret: config.JWT_SECRET_KEY,
       // signOptions: { expiresIn: '60s' },
     }),
   ],

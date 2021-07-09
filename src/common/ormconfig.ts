@@ -13,8 +13,6 @@ dotenv.config({
 
 const { DB_HOST_NAME, DB_PORT, DB_PASSWORD, DB_USER, DB } = process.env;
 
-console.log(path.join(__dirname, '..'));
-
 const config: PostgresConnectionOptions = {
   type: 'postgres',
   host: DB_HOST_NAME || 'localhost',

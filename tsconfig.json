@@ -8,7 +8,7 @@
     "baseUrl": "./",
     "downlevelIteration": false,
     "strict": true,
-    "noUnusedLocals": false, //should be true
+    "noUnusedLocals": false,//should be true
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

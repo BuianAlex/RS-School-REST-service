@@ -8,6 +8,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { ColumnEnt } from '../../columns/entities/column.entity';
+
 export class CreateBoardDto {
   @IsOptional()
   @IsUUID()
