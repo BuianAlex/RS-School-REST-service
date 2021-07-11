@@ -18,7 +18,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 // import { AuthGuard } from '../auth/auth.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('users')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -54,7 +54,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  // @HttpCode(204)
   async remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<boolean> {
     const deleteResult = await this.usersService.remove(id);
     if (!deleteResult) throw new NotFoundException();

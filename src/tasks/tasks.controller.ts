@@ -10,6 +10,7 @@ import {
   UseGuards,
   NotFoundException,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
 
 import { TasksService } from './tasks.service';
@@ -19,7 +20,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('boards')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
@@ -65,7 +66,7 @@ export class TasksController {
   }
 
   @Delete(':boardId/tasks/:id')
-  @HttpCode(204)
+  // @HttpCode(204)
   async remove(@Param('id') id: string): Promise<boolean | undefined> {
     const deleteResult = await this.tasksService.remove(id);
     if (!deleteResult) throw new NotFoundException();

@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  # api:
-  #   build: .
-  #   container_name: node-api
-  #   ports:
-  #     - ${HOST_API_PORT}:${PORT}
-  #   volumes:
-  #     - ${HOST_LOG_PATH}:/usr/app/log
-  #     - ./src:/usr/app/src
-  #   depends_on:
-  #     - db
-  #   restart: always
-  #   networks:
-  #     - skynet
+  api:
+    build: .
+    container_name: node-api
+    ports:
+      - ${HOST_API_PORT}:${PORT}
+    volumes:
+      - ${HOST_LOG_PATH}:/usr/app/log
+      - ./src:/usr/app/src
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - skynet
   db:
     build: ./database/
     container_name: ${DB_HOST_NAME}

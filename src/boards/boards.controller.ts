@@ -17,7 +17,7 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { IBoardToResponse } from './entities/board.entity';
 @Controller('boards')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class BoardsController {
   constructor(private readonly boardsService: BoardsService) {}
 
@@ -53,7 +53,7 @@ export class BoardsController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  // @HttpCode(204)
   async remove(@Param('id') id: string): Promise<boolean | undefined> {
     const deleteResult = await this.boardsService.remove(id);
     if (!deleteResult) throw new NotFoundException();
