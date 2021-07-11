@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import bcrypt from 'bcryptjs';
 
-export class CreateAdmin1625783931436 implements MigrationInterface {
+export class CreateAdmin1626022495066 implements MigrationInterface {
   ADMIN = {
     name: 'admin',
     login: 'admin',

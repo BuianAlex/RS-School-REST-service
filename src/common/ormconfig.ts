@@ -23,7 +23,7 @@ const config: PostgresConnectionOptions = {
   entities: [User, Board, Task, ColumnEnt],
   subscribers: [`dist/subscriber/*.{ts,js}`],
   synchronize: false,
-  migrationsRun: true,
+  // migrationsRun: true,
   migrations: [`dist/migration/*.{ts,js}`],
   cli: {
     migrationsDir: `src/migration`,

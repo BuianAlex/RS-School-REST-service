@@ -37,3 +37,4 @@ lerna-debug.log*
 /docs
 /pg-db
 .env
+/test

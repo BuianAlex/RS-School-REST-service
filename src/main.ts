@@ -1,9 +1,13 @@
 import path from 'path';
+
 import YAML from 'yamljs';
 import { SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-// import * as cookieParser from 'cookie-parser';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
 
 import { AppModule } from './app.module';
 
@@ -12,11 +16,15 @@ import { config } from './common/config';
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = config.USE_FASTIFY
+    ? await NestFactory.create<NestFastifyApplication>(
+        AppModule,
+        new FastifyAdapter()
+      )
+    : await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  SwaggerModule.setup('docs', app, swaggerDocument);
 
-  // app.use(cookieParser());
+  SwaggerModule.setup('docs', app, swaggerDocument);
   await app.listen(config.PORT);
 }
 bootstrap();

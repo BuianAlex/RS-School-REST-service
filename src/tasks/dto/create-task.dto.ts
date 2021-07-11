@@ -9,7 +9,7 @@ export class CreateTaskDto {
   title!: string;
 
   @IsOptional()
-  @IsUUID()
+  // @IsUUID()
   boardId!: string;
 
   @IsNumber()
@@ -19,10 +19,10 @@ export class CreateTaskDto {
   description!: string;
 
   @IsOptional()
-  @IsUUID()
+  // @IsUUID()||
   userId!: string;
 
   @IsOptional()
-  @IsUUID()
+  // @IsUUID()
   columnId!: string;
 }
