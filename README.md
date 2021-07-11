@@ -18,8 +18,11 @@ Create .env file
 #### Environment variables for test
 
 ```
+NODE_ENV=development
 PORT=4000
-DB_HOST_NAME=postgres-db
+AUTH_MODE=false
+JWT_SECRET_KEY=this-is-a-strong-secret-key
+DB_HOST_NAME=db-host
 DB_PORT=5433
 DB=test-db
 DB_USER=dbUser
@@ -28,7 +31,10 @@ HOST_LOG_PATH=./log
 HOST_PERSISTS_PGDATA=./pg-db
 HOST_API_PORT=4000
 ```
-
+For use app with Fastify add to .env 
+```
+USE_FASTIFY=true
+```
 Start app
 
 ```
