@@ -31,10 +31,13 @@ HOST_LOG_PATH=./log
 HOST_PERSISTS_PGDATA=./pg-db
 HOST_API_PORT=4000
 ```
-For use app with Fastify add to .env 
+
+For use app with Fastify add to .env
+
 ```
 USE_FASTIFY=true
 ```
+
 Start app
 
 ```
@@ -46,6 +49,7 @@ How to create database tables and user for the tests with login: admin password:
 ```
 docker container exec -it node-api /bin/sh
 # npm run migration:run
+# npm run seed:run
 ```
 
 How to clean up the database

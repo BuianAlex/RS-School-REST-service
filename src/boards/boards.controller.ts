@@ -6,10 +6,14 @@ import {
   Param,
   Delete,
   NotFoundException,
-  HttpCode,
   Put,
   UseGuards,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { FastifyReply } from 'fastify';
+
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -53,10 +57,12 @@ export class BoardsController {
   }
 
   @Delete(':id')
-  // @HttpCode(204)
-  async remove(@Param('id') id: string): Promise<boolean | undefined> {
+  async remove(
+    @Res({ passthrough: true }) res: Response | FastifyReply,
+    @Param('id') id: string
+  ): Promise<void> {
     const deleteResult = await this.boardsService.remove(id);
     if (!deleteResult) throw new NotFoundException();
-    return true;
+    res.status(HttpStatus.NO_CONTENT);
   }
 }

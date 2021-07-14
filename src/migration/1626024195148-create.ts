@@ -31,9 +31,6 @@ export class create1626024195148 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "task" ADD CONSTRAINT "FK_f316d3fe53497d4d8a2957db8b9" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE NO ACTION`
     );
-    await queryRunner.query(
-      `INSERT INTO public."user"("name", login, "password")VALUES('${this.ADMIN.name}', '${this.ADMIN.login}', '${this.ADMIN.password}');`
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

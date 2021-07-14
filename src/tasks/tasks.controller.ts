@@ -6,12 +6,14 @@ import {
   Param,
   Delete,
   Put,
-  HttpCode,
   UseGuards,
   NotFoundException,
   BadRequestException,
   Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -66,10 +68,12 @@ export class TasksController {
   }
 
   @Delete(':boardId/tasks/:id')
-  // @HttpCode(204)
-  async remove(@Param('id') id: string): Promise<boolean | undefined> {
+  async remove(
+    @Res({ passthrough: true }) res: Response | FastifyReply,
+    @Param('id') id: string
+  ): Promise<void> {
     const deleteResult = await this.tasksService.remove(id);
     if (!deleteResult) throw new NotFoundException();
-    return deleteResult;
+    res.status(HttpStatus.NO_CONTENT);
   }
 }

@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { ConnectionOptions } from 'typeorm';
 
 import { User } from '../users/entities/user.entity';
 import { Board } from '../boards/entities/board.entity';
@@ -13,7 +13,12 @@ dotenv.config({
 
 const { DB_HOST_NAME, DB_PORT, DB_PASSWORD, DB_USER, DB } = process.env;
 
-const config: PostgresConnectionOptions = {
+type IConnectOptions = ConnectionOptions & {
+  seeds: string[];
+  factories: string[];
+};
+
+const config: IConnectOptions = {
   type: 'postgres',
   host: DB_HOST_NAME || 'localhost',
   port: DB_PORT ? +DB_PORT : 5433,
@@ -25,6 +30,8 @@ const config: PostgresConnectionOptions = {
   synchronize: false,
   migrationsRun: true,
   migrations: [`dist/migration/*.{ts,js}`],
+  seeds: ['src/seeds/**/*{.ts,.js}'],
+  factories: ['src/factories/**/*{.ts,.js}'],
   cli: {
     migrationsDir: `src/migration`,
   },

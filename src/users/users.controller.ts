@@ -8,9 +8,12 @@ import {
   ParseUUIDPipe,
   Put,
   NotFoundException,
-  HttpCode,
   UseGuards,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { FastifyReply } from 'fastify';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -54,10 +57,12 @@ export class UsersController {
   }
 
   @Delete(':id')
-  // @HttpCode(204)
-  async remove(@Param('id', new ParseUUIDPipe()) id: string): Promise<boolean> {
+  async remove(
+    @Res({ passthrough: true }) res: Response | FastifyReply,
+    @Param('id', new ParseUUIDPipe()) id: string
+  ): Promise<void> {
     const deleteResult = await this.usersService.remove(id);
     if (!deleteResult) throw new NotFoundException();
-    return true;
+    res.status(HttpStatus.NO_CONTENT);
   }
 }
