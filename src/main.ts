@@ -12,7 +12,6 @@ import {
 import { AppModule } from './app.module';
 
 import { config } from './common/config';
-import { LoggingInterceptor } from './logger/logging.interceptor';
 
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
@@ -29,7 +28,6 @@ async function bootstrap() {
         logger: ['error', 'warn'],
       });
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new LoggingInterceptor());
   SwaggerModule.setup('docs', app, swaggerDocument);
 
   if (config.USE_FASTIFY) {
