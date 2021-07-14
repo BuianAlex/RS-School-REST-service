@@ -20,7 +20,8 @@
     "migration:run": "npm run typeorm migration:run",
     "migration:revert": "npm run typeorm migration:revert",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r dist/common/ormconfig.js",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js  seed  --configName src/common/ormconfig.ts"
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js  seed  --configName src/common/ormconfig.ts",
+    "artillery:run": "artillery run  .\\artillery\\artilleryTest.yml"
   },
   "keywords": [
     "rs",
