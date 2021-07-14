@@ -5,25 +5,31 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Inject,
+  LoggerService,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { FastifyRequest, FastifyReply } from 'fastify';
-
-import { config } from './config';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost): void {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
+  ) {}
+
+  catch(exception: Error, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const { ip, url, method, query, protocol } = ctx.getRequest<Request>();
+    const response = ctx.getResponse<Response | FastifyReply>();
+    const { ip, url, method, query, protocol } = ctx.getRequest<
+      Request | FastifyRequest
+    >();
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const resMsg = {
-      timestamp: new Date().toISOString(),
+    const logMsg = {
       statusCode: status,
       ip,
       protocol,
@@ -31,10 +37,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
       path: url,
       query,
     };
-    console.log(resMsg);
+    this.logger.log({ context: 'HttpExceptionFilter', message: logMsg });
 
-    if (exception instanceof Error) {
-      console.log(exception.stack);
+    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error({
+        context: 'HttpExceptionFilter',
+        message: logMsg,
+        stack: exception.stack,
+      });
     }
     response.status(status).send();
   }

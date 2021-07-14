@@ -8,6 +8,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { AppModule } from './app.module';
 
@@ -29,7 +30,7 @@ async function bootstrap() {
       });
   app.useGlobalPipes(new ValidationPipe());
   SwaggerModule.setup('docs', app, swaggerDocument);
-
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   if (config.USE_FASTIFY) {
     await app.listen(config.PORT, '0.0.0.0');
   } else {
